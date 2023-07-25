@@ -29,7 +29,7 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-right: 200px; padding-left: 200px;">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
        <div class="mb-2 text-center">

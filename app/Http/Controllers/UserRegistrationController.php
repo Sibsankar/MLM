@@ -64,16 +64,16 @@ class UserRegistrationController extends Controller
     {
         //dd($request->all());
 
-$first_nm = substr($request->associate_name, 0, 5);
-$string = str_replace('/', '', $request->dob);
-$tempPass=$first_nm.'@'.$string;
+        $first_nm = substr($request->associate_name, 0, 5);
+        $string = str_replace('/', '', $request->dob);
+        $tempPass=$first_nm.'@'.$string;
 
-       $regiserUserId= User::create([
-            'name' => $request->associate_name,
-            'email' => $request->email,
-            'phone_no' => $request->phone_no,
-            'password' => Hash::make($tempPass),
-        ])->id;
+            $regiserUserId= User::create([
+                'name' => $request->associate_name,
+                'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'password' => Hash::make($tempPass),
+            ])->id;
         //dd($regiserUser);
 
         $userDetails = new User_detail;        
