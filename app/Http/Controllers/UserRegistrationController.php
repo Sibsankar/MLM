@@ -64,13 +64,13 @@ class UserRegistrationController extends Controller
     {
         //dd($request->all());
 
-$first_nm = substr($request->associate_name, 0, 5);
-$string = str_replace('/', '', $request->dob);
-$tempPass=$first_nm.'@'.$string;
+        $first_nm = substr($request->associate_name, 0, 5);
+        $string = str_replace('/', '', $request->dob);
+        $tempPass=$first_nm.'@'.$string;
 
 
 
-       $regiserUserId= User::create([
+        $regiserUserId= User::create([
             'name' => $request->associate_name,
             'email' => $request->email,
             'phone_no' => $request->phone_no,
@@ -89,6 +89,7 @@ $tempPass=$first_nm.'@'.$string;
         $userDetails->dob = date('Y-m-d', strtotime($request->dob));
         $userDetails->aadhar_no = $request->aadhar_no;
         $userDetails->phone_no = $request->phone_no;
+        $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by != '' : '';
         $userDetails->save();
 
 
