@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Exception;
 use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User; 
+use App\Models\User_detail; 
 
 class HomeController extends Controller
 {
@@ -25,6 +28,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // dd(\Auth::user()->details[0]->sponsor_code);
+        
         // $receiverNumber = "+918617827510";
         // $message = "Chol ghumote hobe ebar!!!";
   
@@ -45,6 +50,23 @@ class HomeController extends Controller
         //     dd("Error: ". $e->getMessage());
         // }
         
-        return view('home');
+        return view('home')->with(['user' => \Auth::user()]);
+    }
+
+    public function changePwd(Request $request) {
+        // dd($request->all());
+        if($request->password === $request->cpassword) {
+            $user = User::find($request->user_id);
+            $user->update([
+                'password' => Hash::make($request->password),
+                'pwd_status' => '1'
+            ]);
+        }
+        
+        return redirect()->route('home');
+    }
+
+    public function updateProfile(Request $request) {
+        dd($request->all());
     }
 }
