@@ -68,8 +68,6 @@ $first_nm = substr($request->associate_name, 0, 5);
 $string = str_replace('/', '', $request->dob);
 $tempPass=$first_nm.'@'.$string;
 
-
-
        $regiserUserId= User::create([
             'name' => $request->associate_name,
             'email' => $request->email,
@@ -78,8 +76,7 @@ $tempPass=$first_nm.'@'.$string;
         ])->id;
         //dd($regiserUser);
 
-        $userDetails = new User_detail;
-        $request->user_id=1;
+        $userDetails = new User_detail;        
         $request->sponsor_code="DVA".$first_nm.''.$string;
         $userDetails->associate_name = $request->associate_name;
         $userDetails->email = $request->email;
