@@ -47,7 +47,8 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form method="POST" action="{{ route('addUser') }}" enctype='multipart/form-data'>
+                @csrf
                 <div class="card-body">
 
                 <div style="border: 1px solid rgb(5 124 117); padding:15px">
@@ -77,13 +78,17 @@
                   
                   <div class="form-group">
                     <label for="associate_name">Name of Associate</label>
-                    <input type="text" class="form-control" name="associate_name" id="associate_name" placeholder="Enter Name of Associate">
+                    <input type="text" class="form-control" name="associate_name" required id="associate_name" placeholder="Enter Name of Associate">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" required>
                   </div>
                   
                   <div class="form-group">
                     <label>Date of Birth:</label>
                       <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" name="dob" data-target="#reservationdate"/>
+                          <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate"/>
                           <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                               <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                           </div>
@@ -96,11 +101,11 @@
                   </div>
                   <div class="form-group">
                     <label for="rank">Aadhar No</label>
-                    <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" placeholder="Enter Aadhar No">
+                    <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No">
                   </div>
                   <div class="form-group">
                     <label for="rank">Phone No</label>
-                    <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Enter Phone No">
+                    <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No">
                   </div>
                   {{-- <div class="form-group">
                     <label for="exampleInputFile">Rank</label>

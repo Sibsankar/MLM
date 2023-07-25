@@ -21,3 +21,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user-registration', [App\Http\Controllers\UserRegistrationController::class, 'registration'])->name('registration');
+
+Route::post('/add-user', [App\Http\Controllers\UserRegistrationController::class, 'addUser'])->name('addUser');
