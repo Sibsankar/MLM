@@ -32,14 +32,14 @@
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-       <div class="mb-2">
+       <div class="mb-2 text-center">
         <img src="{{ url('/')}}/assets/dist/img/dva.jpeg" height="80" width="200" alt="">
        </div>
         <!-- /.row -->
         <!-- Main row -->
-        <div class="row">
+        <div class="row ml-4 mr-4">
 
-          <div class="col-md-6">
+          <div class="col-md-12">
             <!-- general form elements -->
             <div class="card card-info">
               <div class="card-header">
