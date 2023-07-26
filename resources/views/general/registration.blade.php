@@ -45,6 +45,18 @@
               <div class="card-header">
                 <h3 class="card-title">Joining Form</h3>
               </div>
+              @if(session('successmessage'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('successmessage')}}
+                </div>
+                @endif
+                @if(count($errors))
+                    @foreach($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{$error}}
+                    </div>
+                    @endforeach
+                @endif
               <!-- /.card-header -->
               <!-- form start -->
               <form method="POST" action="{{ route('addUser') }}" enctype='multipart/form-data'>

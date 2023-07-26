@@ -12,9 +12,14 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- daterangepicker -->
+    <script src="{{ url('/')}}/assets/plugins/moment/moment.min.js"></script>
+    <script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
 </head>
 <body>
     <div id="app">
