@@ -28,7 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // dd(\Auth::user()->details[0]->sponsor_code);
+        // dd(\Auth::user()->details[0]->image_path);
         
         // $receiverNumber = "+918617827510";
         // $message = "Chol ghumote hobe ebar!!!";
@@ -63,10 +63,40 @@ class HomeController extends Controller
             ]);
         }
         
-        return redirect()->route('home');
+        return redirect()->route('home')->with('successmessage','Password updated successfully');
     }
 
     public function updateProfile(Request $request) {
-        dd($request->all());
+        // dd($request->all());
+        // $request->validate([
+        //     'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+        // ]);
+
+        $user_details_data = [
+            "associate_name" => $request->associate_name,
+            "email" =>  $request->email,
+            "dob" => $request->dob,
+            "rank" => $request->rank,
+            "aadhar_no" => $request->aadhar_no,
+        ];
+
+        if(!empty($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+
+            // Public Folder
+            $request->image->move(public_path('images'), $imageName);
+            $user_details_data['image'] = $imageName;
+        }
+
+        $user_data = [
+            "email" =>  $request->email
+        ];
+
+        $user = User::find($request->user_id)->update($user_data);
+        $user_details = User_detail::where('user_id', $request->user_id)->first();
+        $user_details->update($user_details_data);
+
+        return redirect()->route('home')->with('successmessage','Profile updated successfully');
+
     }
 }

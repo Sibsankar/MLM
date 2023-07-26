@@ -13,6 +13,18 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if(session('successmessage'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{session('successmessage')}}
+                    </div>
+                    @endif
+                    @if(count($errors))
+                        @foreach($errors->all() as $error)
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{$error}}
+                        </div>
+                        @endforeach
+                    @endif
                     @if($user->pwd_status == 1)
                         <p class="h4">Edit Profile</p>
                         <!-- form start -->
@@ -74,19 +86,22 @@
                             <label for="rank">Phone No</label>
                             <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No" value={{$user->phone_no }} disabled>
                         </div>
-                        {{-- <div class="form-group">
-                        <label for="exampleInputFile">Rank</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                            </div>
-                            <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
+                        <div class="form-group">
+                            <label for="image">Photo</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="image" name="image">
+                                    <!-- <label class="custom-file-label" for="exampleInputFile">Choose file</label> -->
+                                </div>
+                                <!-- <div class="input-group-append">
+                                <span class="input-group-text">Upload</span>
+                                </div> -->
+                                @if($user->details[0]->image_path)
+                                    <img src="{{$user->details[0]->image_path}}" width="100px"/>
+                                @endif
                             </div>
                         </div>
-                        </div> --}}
-                        
+                        <input type="hidden" name="user_id" value={{$user->id}}>
                         <!-- /.card-body -->
 
                         <div class="card-footer mt-2">
