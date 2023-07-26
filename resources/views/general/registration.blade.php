@@ -50,14 +50,14 @@
               <form method="POST" action="{{ route('addUser') }}" enctype='multipart/form-data'>
                 @csrf
                 <div class="card-body">
-
+<input type="hidden" id="referred_by" name="referred_by" value="">
                 <div style="border: 1px solid rgb(5 124 117); padding:15px">
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="exampleInputEmail1">Sponsor Code</label>
                       <input type="sponser_code" class="form-control" id="sponser_code" placeholder="Enter Sponsor Code">               
                                     
-                      <button type="button" class="btn btn-xs btn-success">Search</button> 
+                      <button type="button" class="btn btn-xs btn-success" onclick="getSponsorDetails()">Search</button> 
                     </div> 
 
                   </div>
@@ -148,6 +148,49 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+<script type="text/javascript">
+  function getSponsorDetails(){
+    var spCode = $('#sponser_code').val();
+    var postForm = { //Fetch form data
+            'spcode'     : spCode 
+            
+        };
+      var url="{{ URL::to('') }}"+"/get-sponser-details";
+//alert(url);
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+    $.ajax({
+                type:'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url: url ,                
+                data: postForm,
+                datatype: 'JSON',
+                success: (response) => {
+                  console.log(response);
+                  if(response!='0'){
+                    alert(response.associate_name);
+                    $("#spName").val(response.associate_name);
+                    $("#spRank").val(response.rank);
+                    $("#referred_by").val(response.user_id);
+
+                  }else{
+                    
+                  }
+                    //alert('Form submitted successfully',response);
+                    //location.reload();
+                },
+                error: function(response){
+                    
+                }
+           });
+    alert(spCode);
+  }
+  
+</script>
 @endsection
 
 

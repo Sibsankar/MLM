@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\User_detail; 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserRegistrationController extends Controller
 {
@@ -87,12 +88,29 @@ class UserRegistrationController extends Controller
         $userDetails->rank = $request->rank;
         $userDetails->dob = date('Y-m-d', strtotime($request->dob));
         $userDetails->aadhar_no = $request->aadhar_no;
+        $userDetails->referred_by = $request->referred_by;
         $userDetails->phone_no = $request->phone_no;
-        $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by != '' : '';
-        $userDetails->save();
+       
+        if($userDetails->save()){
+            return redirect('/login');
+        }
 
+        
 
-        dd("Add user");
+    }
+
+    public function getSponser(Request $request){
+//echo 'Sponsor code --'.$request->spcode;exit;
+$getUserData = DB::table('user_details')
+                ->where('sponsor_code', '=', $request->spcode)
+                ->first();
+                if(!empty($getUserData)){
+                    return  $getUserData;
+                }else{
+                    return '0';
+                }
+            
+
 
     }
 }
