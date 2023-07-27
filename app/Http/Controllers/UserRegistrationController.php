@@ -74,9 +74,17 @@ class UserRegistrationController extends Controller
         $getPhoneNumber = DB::table('user_details')
                         ->where('phone_no', '=', $request->phone_no)
                         ->first();
-                        if(!empty($getPhoneNumber)){
-                            return Redirect::back()->withErrors(['msg' => 'This phone number is already registered with us. Please login']);
-                        }
+
+        if(!empty($getPhoneNumber)){
+            return Redirect::back()->withErrors(['msg' => 'This phone number is already registered with us. Please login']);
+        }
+
+        $getEmail = DB::table('user_details')
+        ->where('email', '=', $request->email)
+        ->first();
+        if(!empty($getEmail)){
+            return Redirect::back()->withErrors(['msg' => 'This email is already registered with us. Please login']);
+        }
 
 
 
@@ -86,7 +94,7 @@ class UserRegistrationController extends Controller
         $tempPass=$first_nm.'@'.$string;
         $associateCode = "DVA".$first_nm.''.$string;
         //send sms
-        $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. "\n Login using your register mobile number and password ".$tempPass.". \n MLM Team"; 
+        $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. ". Login using your register mobile number and password ".$tempPass; 
         if ($this->sendSMS($request->phone_no, $message)) {
 
             $regiserUserId= User::create([
@@ -101,13 +109,16 @@ class UserRegistrationController extends Controller
             $request->sponsor_code=$associateCode;
             $userDetails->associate_name = $request->associate_name;
             $userDetails->email = $request->email;
-            $userDetails->user_id = $regiserUserId;
+            $userDetails->user_id = 5;
             $userDetails->sponsor_code = $request->sponsor_code;
             $userDetails->rank = $request->rank;
             $userDetails->dob = date('Y-m-d', strtotime($request->dob));
             $userDetails->aadhar_no = $request->aadhar_no;
             $userDetails->phone_no = $request->phone_no;
-            $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by != '' : '';
+
+            $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by: '';
+
+            //dd($userDetails);
             $userDetails->save();
             
             return redirect()->route('registration')->with('successmessage','You are successfully registered');
@@ -115,7 +126,7 @@ class UserRegistrationController extends Controller
     }
 
     public function sendSMS ($number, $message) {
-        $receiverNumber = "+918617827510"; // change to $number
+        $receiverNumber = "+919733962148"; // change to $number
   
         try {
   
