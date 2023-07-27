@@ -27,5 +27,7 @@ TWILIO_SMS_FROM=+15005550006
 
 ============ Test Twilio ===============
 TWILIO_ACCOUNT_SID=AC30a80819bd208b67446cf81c04a8dd95
-TWILIO_AUTH_TOKEN=373eb9b22d2d8d886e5d23db85c67896
+TWILIO_AUTH_TOKEN=f401f26c3659789a7cbd85c6c82e161a
 TWILIO_SMS_FROM=+18787787980
+
+https://console.twilio.com/us1/develop/sms/try-it-out/send-an-sms
