@@ -10,6 +10,7 @@ use App\Models\User_detail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Redirect;
 
 class UserRegistrationController extends Controller
 {
@@ -65,12 +66,27 @@ class UserRegistrationController extends Controller
     {
         //dd($request->all());
 
+
+        if(strlen($request->phone_no)<10 || strlen($request->phone_no)>10){
+            return Redirect::back()->withErrors(['msg' => 'Please enter valid 10 digit phone number']);
+        }
+
+        $getPhoneNumber = DB::table('user_details')
+                        ->where('phone_no', '=', $request->phone_no)
+                        ->first();
+                        if(!empty($getPhoneNumber)){
+                            return Redirect::back()->withErrors(['msg' => 'This phone number is already registered with us. Please login']);
+                        }
+
+
+
+
         $first_nm = substr($request->associate_name, 0, 5);
         $string = str_replace('/', '', $request->dob);
         $tempPass=$first_nm.'@'.$string;
-
+        $associateCode = "DVA".$first_nm.''.$string;
         //send sms
-        $message = "Your password is ".$tempPass.". \n MLM Team";
+        $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. "\n Login using your register mobile number and password ".$tempPass.". \n MLM Team"; 
         if ($this->sendSMS($request->phone_no, $message)) {
 
             $regiserUserId= User::create([
@@ -82,7 +98,7 @@ class UserRegistrationController extends Controller
             //dd($regiserUser);
 
             $userDetails = new User_detail;        
-            $request->sponsor_code="DVA".$first_nm.''.$string;
+            $request->sponsor_code=$associateCode;
             $userDetails->associate_name = $request->associate_name;
             $userDetails->email = $request->email;
             $userDetails->user_id = $regiserUserId;
@@ -94,7 +110,7 @@ class UserRegistrationController extends Controller
             $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by != '' : '';
             $userDetails->save();
             
-            return redirect()->route('registration')->with('successmessage','User added');
+            return redirect()->route('registration')->with('successmessage','You are successfully registered');
         }
     }
 
@@ -118,4 +134,21 @@ class UserRegistrationController extends Controller
             dd("Error: ". $e->getMessage());
         }
     }
+
+
+    public function getSponser(Request $request){
+        $getUserData = DB::table('user_details')
+                        ->where('sponsor_code', '=', $request->spcode)
+                        ->first();
+                        if(!empty($getUserData)){
+                            return  $getUserData;
+                        }else{
+                            return '0';
+                        }      
+        
+               
+        
+            }
+
+
 }

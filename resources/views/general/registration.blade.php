@@ -7,7 +7,7 @@
 
   <!-- Main Sidebar Container -->
   
-
+  
   <!-- Content Wrapper. Contains page content -->
   <div >
     <!-- Content Header (Page header) -->
@@ -15,6 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
+            
             {{-- <h1 class="m-0">Joining Form</h1> --}}
           </div><!-- /.col -->
           {{-- <div class="col-sm-6">
@@ -34,6 +35,8 @@
         <!-- Small boxes (Stat box) -->
        <div class="mb-2 text-center">
         <img src="{{ url('/')}}/assets/dist/img/dva.jpeg" height="80" width="200" alt="">
+        <a href="{{ route('login') }}" class="btn btn-xl btn-success font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
+        
        </div>
         <!-- /.row -->
         <!-- Main row -->
@@ -45,6 +48,7 @@
               <div class="card-header">
                 <h3 class="card-title">Joining Form</h3>
               </div>
+              
               @if(session('successmessage'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{session('successmessage')}}
@@ -68,7 +72,7 @@
                     <div class="form-group col-md-6">
                       <label for="exampleInputEmail1">Sponsor Code</label>
                       <input type="sponser_code" class="form-control" id="sponser_code" placeholder="Enter Sponsor Code">               
-                                    
+                         <p id="jErr" style="color: red"></p>           
                       <button type="button" class="btn btn-xs btn-success" onclick="getSponsorDetails()">Search</button> 
                     </div> 
 
@@ -117,7 +121,7 @@
                   </div>
                   <div class="form-group">
                     <label for="rank">Phone No</label>
-                    <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No">
+                    <input type="text" class="form-control phone" id="phone_no" maxlength="10" name="phone_no" required placeholder="Enter Phone No" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                   {{-- <div class="form-group">
                     <label for="exampleInputFile">Rank</label>
@@ -162,8 +166,34 @@
 <!-- ./wrapper -->
 
 <script type="text/javascript">
+
+function phoneMask(e){
+	var s=e.val();
+	var s=s.replace(/[_\W]+/g,'');
+	var n=s.length;
+	if(n<11){var m='(00) 0000-00000';}else{var m='(00) 00000-00000';}
+	$(e).mask(m);
+}
+
+// Type
+$('body').on('keyup','.phone',function(){	
+	phoneMask($(this));
+});
+
+// On load
+$('.phone').keyup();
+
+
+
+
   function getSponsorDetails(){
     var spCode = $('#sponser_code').val();
+    if(spCode==""){
+      $("#jErr").text('please enter sponsor code to get your sponsor details');
+      return false;
+    }else{
+      $("#jErr").text('');
+    }
     var postForm = { //Fetch form data
             'spcode'     : spCode 
             
