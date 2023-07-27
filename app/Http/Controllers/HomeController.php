@@ -8,6 +8,7 @@ use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use App\Models\User_detail; 
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -28,29 +29,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // dd(\Auth::user()->details[0]->image_path);
-        
-        // $receiverNumber = "+918617827510";
-        // $message = "Chol ghumote hobe ebar!!!";
-  
-        // try {
-  
-        //     $account_sid = getenv("TWILIO_ACCOUNT_SID");
-        //     $auth_token = getenv("TWILIO_AUTH_TOKEN");
-        //     $twilio_number = getenv("TWILIO_SMS_FROM");
-  
-        //     $client = new Client($account_sid, $auth_token);
-        //     $client->messages->create($receiverNumber, [
-        //         'from' => $twilio_number, 
-        //         'body' => $message]);
-  
-        //     dd('SMS Sent Successfully.');
-  
-        // } catch (Exception $e) {
-        //     dd("Error: ". $e->getMessage());
-        // }
-        
-        return view('home')->with(['user' => \Auth::user()]);
+         //dd(\Auth::user()->id);
+        //  $getPhoneNumber = DB::table('user_details')
+        //  ->where('user_id', '=', \Auth::user()->id)
+        //  ->first();
+        //  dd($getPhoneNumber);
+         
+    $getSponsorDetails = DB::table('user_details as ud1')  
+    ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
+    ->where('ud1.user_id', \Auth::user()->id)
+    ->select('ud2.associate_name','ud2.rank','ud2.sponsor_code','ud2.user_id')->get();
+       // dd($getSponsorDetails[0]->associate_name);
+        return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails ]);
     }
 
     public function changePwd(Request $request) {

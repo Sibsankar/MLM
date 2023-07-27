@@ -109,7 +109,7 @@ class UserRegistrationController extends Controller
             $request->sponsor_code=$associateCode;
             $userDetails->associate_name = $request->associate_name;
             $userDetails->email = $request->email;
-            $userDetails->user_id = 5;
+            $userDetails->user_id = $regiserUserId;
             $userDetails->sponsor_code = $request->sponsor_code;
             $userDetails->rank = $request->rank;
             $userDetails->dob = date('Y-m-d', strtotime($request->dob));

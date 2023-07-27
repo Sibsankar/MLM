@@ -89,7 +89,10 @@
 <script>
   //Date picker
   $('#reservationdate').datetimepicker({
-        format: 'L'
+        format:'L',
+        dateFormat: 'yy-mm-dd',
+        timepicker: false
+
     });
 </script>
 </body>

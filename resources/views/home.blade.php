@@ -31,12 +31,12 @@
                         <form method="POST" action="{{ route('updateProfile') }}" enctype='multipart/form-data'>
                         @csrf
                         <div class="card-body">
-
+                            <input type="hidden" id="referred_by" name="referred_by" value="{{ isset($sponsorDetails[0]->user_id) ? $sponsorDetails[0]->user_id : '' }}">
                         <div style="border: 1px solid rgb(5 124 117); padding:15px">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="exampleInputEmail1">Sponsor Code</label>
-                                    <input type="sponser_code" class="form-control" id="sponser_code" placeholder="Enter Sponsor Code">               
+                                    <input type="sponser_code" class="form-control" id="sponser_code" value="{{ isset($sponsorDetails[0]->sponsor_code) ? $sponsorDetails[0]->sponsor_code : '' }}" placeholder="Enter Sponsor Code">               
                                                 
                                     
                                 </div> 
@@ -45,11 +45,11 @@
                             <div class="row" id="spDiv" >
                                 <div class="form-group col-md-6">
                                     <label for="spName">Sponsor Name</label>
-                                    <input type="text" class="form-control" id="spName" readonly>
+                                    <input type="text" class="form-control" id="spName" value="{{ isset($sponsorDetails[0]->associate_name) ? $sponsorDetails[0]->associate_name : '' }}" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="spRank">Sponsor Rank</label>
-                                    <input type="text" class="form-control" id="spRank" readonly>
+                                    <input type="text" class="form-control" id="spRank" value="{{ isset($sponsorDetails[0]->rank) ? $sponsorDetails[0]->rank : '' }}" readonly>
                                 </div>
 
                             </div>
