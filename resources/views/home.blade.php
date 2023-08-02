@@ -67,10 +67,22 @@
                         <div class="form-group">
                             <label>Date of Birth:</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value={{$user->details[0]->dob}}/>
+                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value={{$user->details[0]->dob}}>
                                 <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rank">Gender</label>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="male" name="gender" value="Male">
+                            <label for="male" class="custom-control-label">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="female" name="gender" value="Female">
+                            <label for="female" class="custom-control-label">Female</label>
                             </div>
                         </div>
                             

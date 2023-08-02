@@ -110,6 +110,17 @@
                           </div>
                       </div>
                   </div>
+                  <!-- <div class="form-group">
+                    <label for="rank">Gender</label>
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" id="male" name="gender" value="Male">
+                      <label for="male" class="custom-control-label">Male</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input class="custom-control-input" type="radio" id="female" name="gender" value="Female">
+                      <label for="female" class="custom-control-label">Female</label>
+                    </div>
+                  </div> -->
                   
                   <div class="form-group">
                     <label for="rank">Rank</label>
@@ -119,6 +130,10 @@
                     <label for="rank">Aadhar No</label>
                     <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No">
                   </div>
+                  <!-- <div class="form-group">
+                    <label for="rank">PAN No</label>
+                    <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No">
+                  </div> -->
                   <div class="form-group">
                     <label for="rank">Phone No</label>
                     <input type="text" class="form-control phone" id="phone_no" maxlength="10" name="phone_no" required placeholder="Enter Phone No" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
