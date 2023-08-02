@@ -66,7 +66,7 @@ class UserRegistrationController extends Controller
 
         $first_nm = substr($request->associate_name, 0, 5);
         $string = str_replace('/', '', $request->dob);
-        $tempPass=$first_nm.'@'.$string;
+        $tempPass=trim($first_nm).'@'.$string;
 
         //send sms
         $message = "Your password is ".$tempPass.". \n MLM Team";

@@ -18,6 +18,10 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- daterangepicker -->
+    <!-- jQuery -->
+    <script src="{{ url('/')}}/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{ url('/')}}/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="{{ url('/')}}/assets/plugins/moment/moment.min.js"></script>
     <script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
 </head>
@@ -80,6 +84,12 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <script>
+        //Date picker
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+</script>
     </div>
 </body>
 </html>
