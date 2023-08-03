@@ -147,7 +147,7 @@ class UserRegistrationController extends Controller
             //dd($userDetails);
             $userDetails->save();
             
-            return redirect()->route('registration')->with('successmessage','You are successfully registered.('.$tempPass.')');
+            return redirect()->route('registration')->with('successmessage','You are successfully registered.');
         }
     }
 
