@@ -14,12 +14,21 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url('/')}}/assets/dist/css/adminlte.min.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    <!-- daterangepicker -->
-    <script src="{{ url('/')}}/assets/plugins/moment/moment.min.js"></script>
-    <script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
+   
 </head>
 <body>
     <div id="app">
@@ -65,6 +74,8 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
+                                    <a class="dropdown-item border-top" href="{{ route('home') }}">Profile</a>
+                                    <a class="dropdown-item border-top" href="{{ route('my-associate') }}">My Associates</a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -82,4 +93,45 @@
         </main>
     </div>
 </body>
+ <!-- daterangepicker -->
+ <script src="{{ url('/')}}/assets/plugins/jquery/jquery.min.js"></script>
+ <!-- jQuery UI 1.11.4 -->
+ <script src="{{ url('/')}}/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+     <script src="{{ url('/')}}/assets/plugins/moment/moment.min.js"></script>
+     <script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url('/')}}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="{{ url('/')}}/assets/plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="{{ url('/')}}/assets/plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="{{ url('/')}}/assets/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="{{ url('/')}}/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="{{ url('/')}}/assets/plugins/moment/moment.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ url('/')}}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="{{ url('/')}}/assets/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="{{ url('/')}}/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="{{ url('/')}}/assets/dist/js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ url('/')}}/assets/dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{ url('/')}}/assets/dist/js/pages/dashboard.js"></script>
+<script>
+    $('#reservationdate').datetimepicker({
+        format:'L',
+        dateFormat: 'yy-mm-dd',
+        timepicker: false
+
+    });
+    
+</script>
 </html>

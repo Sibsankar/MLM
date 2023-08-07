@@ -56,6 +56,18 @@ class HomeController extends Controller
         return redirect()->route('home')->with('successmessage','Password updated successfully');
     }
 
+    public function myassociate()
+    {
+       
+         
+    $getSponsorDetails = DB::table('user_details as ud1')  
+    ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
+    ->where('ud1.user_id', \Auth::user()->id)
+    ->select('ud2.associate_name','ud2.rank','ud2.sponsor_code','ud2.user_id')->get();
+       // dd($getSponsorDetails[0]->associate_name);
+        return view('myassociate')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails ]);
+    }
+
     public function updateProfile(Request $request) {
         // dd($request->all());
         // $request->validate([
