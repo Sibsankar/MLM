@@ -72,7 +72,6 @@ class UserRegistrationController extends Controller
             'associate_name' => 'required',
             'email' => 'required|email',
             'phone_no' => 'required|min:10|max:10',
-            'referred_by' => 'required',
             'rank' => 'required',
             'dob' => 'required',
             'aadhar_no' => 'required',

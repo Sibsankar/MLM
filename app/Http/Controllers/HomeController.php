@@ -29,18 +29,24 @@ class HomeController extends Controller
      */
     public function index()
     {
-         //dd(\Auth::user()->id);
-        //  $getPhoneNumber = DB::table('user_details')
-        //  ->where('user_id', '=', \Auth::user()->id)
-        //  ->first();
-        //  dd($getPhoneNumber);
-         
+       //dd(\Auth::user()->id);  
+    
     $getSponsorDetails = DB::table('user_details as ud1')  
     ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
     ->where('ud1.user_id', \Auth::user()->id)
-    ->select('ud2.associate_name','ud2.rank','ud2.sponsor_code','ud2.user_id')->get();
-       // dd($getSponsorDetails[0]->associate_name);
-        return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails ]);
+    ->select('ud1.associate_name','ud1.rank','ud1.sponsor_code','ud1.user_id','ud1.referred_by')->get();
+     //dd($getSponsorDetails);
+
+
+     $getUserData = DB::table('user_details')
+                        ->where('user_id', '=', $getSponsorDetails[0]->referred_by)
+                        ->first();
+//dd($getUserData);
+       $getRanks = DB::table('ranks')
+                                ->where('rank_seq', '<', $getUserData->rank)
+                                ->get();
+                               // dd($getRanks);
+        return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks ]);
     }
 
     public function changePwd(Request $request) {
@@ -114,7 +120,7 @@ class HomeController extends Controller
         $user_details_data = [
             "associate_name" => $request->associate_name,
             "email" =>  $request->email,
-            "dob" => $request->dob,
+            "dob" => date('Y-m-d', strtotime($request->dob)),
             "rank" => $request->rank,
             "aadhar_no" => $request->aadhar_no,
             "pan_no" => $request->pan_no,

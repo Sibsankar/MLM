@@ -121,7 +121,7 @@
                     <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
                       <option selected="selected">Select Rank</option>
                       @foreach($rankData as $ranks)
-                      <option value="{{$ranks->id}}">{{$ranks->rank_name}}</option>
+                      <option value="{{$ranks->id}}" >{{$ranks->rank_name}}</option>
                       @endforeach
                       
                     </select>

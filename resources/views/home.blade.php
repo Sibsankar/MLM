@@ -59,7 +59,7 @@
                             
                         <div class="form-group">
                             <label for="associate_name">Name of Associate</label>
-                            <input type="text" class="form-control" name="associate_name" required id="associate_name" placeholder="Enter Name of Associate" value={{$user->details[0]->associate_name}}>
+                            <input type="text" class="form-control" name="associate_name" required id="associate_name" placeholder="Enter Name of Associate" value="{{$user->details[0]->associate_name}}">
                         </div>
                         <div class="form-group">
                             <label for="associate_name">Associate Code</label>
@@ -73,7 +73,7 @@
                         <div class="form-group">
                             <label>Date of Birth:</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value={{date('m/d/Y', strtotime($user->details[0]->dob))}} >
+                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value="{{date('m/d/Y', strtotime($user->details[0]->dob))}}" >
                                 <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -92,16 +92,16 @@
                             </div>
                         </div>
                             
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="rank">Rank</label>
                             <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank" value={{$user->details[0]->rank}}>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label>Select Rank</label>
                             <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
                               <option selected="selected">Select Rank</option>
                               @foreach($rankData as $ranks)
-                              <option  value="{{$ranks->id}}">{{$ranks->rank_name}}</option>
+                              <option  value="{{$ranks->id}}" @if($sponsorDetails[0]->rank == $ranks->id) selected  @endif>{{$ranks->rank_name}}</option>
                               @endforeach
                               
                             </select>
