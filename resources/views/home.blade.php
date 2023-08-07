@@ -97,6 +97,16 @@
                             <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank" value={{$user->details[0]->rank}}>
                         </div>
                         <div class="form-group">
+                            <label>Select Rank</label>
+                            <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
+                              <option selected="selected">Select Rank</option>
+                              @foreach($rankData as $ranks)
+                              <option  value="{{$ranks->id}}">{{$ranks->rank_name}}</option>
+                              @endforeach
+                              
+                            </select>
+                          </div>
+                        <div class="form-group">
                             <label for="rank">Aadhar No</label>
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value={{$user->details[0]->aadhar_no }}>
                         </div>

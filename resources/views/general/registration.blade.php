@@ -54,6 +54,11 @@
                     {{session('successmessage')}}
                 </div>
                 @endif
+                @if(session('temppassword'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('temppassword')}}
+                </div>
+                @endif
                 @if(count($errors))
                     @foreach($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -110,21 +115,16 @@
                           </div>
                       </div>
                   </div>
-                  <!-- <div class="form-group">
-                    <label for="rank">Gender</label>
-                    <div class="custom-control custom-radio">
-                      <input class="custom-control-input" type="radio" id="male" name="gender" value="Male">
-                      <label for="male" class="custom-control-label">Male</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                      <input class="custom-control-input" type="radio" id="female" name="gender" value="Female">
-                      <label for="female" class="custom-control-label">Female</label>
-                    </div>
-                  </div> -->
                   
                   <div class="form-group">
-                    <label for="rank">Rank</label>
-                    <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank">
+                    <label>Select Rank</label>
+                    <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
+                      <option selected="selected">Select Rank</option>
+                      @foreach($rankData as $ranks)
+                      <option value="{{$ranks->id}}">{{$ranks->rank_name}}</option>
+                      @endforeach
+                      
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="rank">Aadhar No</label>
@@ -214,7 +214,7 @@ $('.phone').keyup();
             
         };
       var url="{{ URL::to('') }}"+"/get-sponser-details";
-//alert(url);
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -227,24 +227,49 @@ $.ajaxSetup({
                 data: postForm,
                 datatype: 'JSON',
                 success: (response) => {
-                  console.log(response);
+                  
                   if(response!='0'){
-                    alert(response.associate_name);
+                    
                     $("#spName").val(response.associate_name);
                     $("#spRank").val(response.rank);
                     $("#referred_by").val(response.user_id);
+                    var postForm2 = { 
+                    'rank_id'     : response.rank 
+
+                    };
+                    var url2="{{ URL::to('') }}"+"/get-rank-details";
+              $.ajax({
+                type:'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url: url2 ,                
+                data: postForm2,
+                datatype: 'JSON',
+                success: (response) => {
+                  console.log(response);
+                  if(response!='0'){
+                   $("#rank").empty();
+                    $("#rank").append(response);                  
 
                   }else{
                     
                   }
-                    //alert('Form submitted successfully',response);
-                    //location.reload();
+                    
                 },
                 error: function(response){
                     
                 }
            });
-    alert(spCode);
+
+                  }else{
+                    
+                  }
+                    
+                },
+                error: function(response){
+                    
+                }
+           });
+    
   }
   
 </script>

@@ -55,9 +55,11 @@ class UserRegistrationController extends Controller
     }
 
     public function registration()
-    {
+    { 
+
+        $getRanks = DB::table('ranks')->get();
         
-        return view('general/registration');
+        return view('general/registration')->with(['rankData'=>$getRanks]);
 
     }
 
@@ -147,7 +149,7 @@ class UserRegistrationController extends Controller
             //dd($userDetails);
             $userDetails->save();
             
-            return redirect()->route('registration')->with('successmessage','You are successfully registered.');
+            return redirect()->route('registration')->with('successmessage','You are successfully registered.')->with('temppassword','Your auto generated password is - '.$tempPass.'. Please change your password after first login. Thank you');
         }
     }
 
@@ -186,6 +188,34 @@ class UserRegistrationController extends Controller
                
         
             }
+
+            public function getRankbySp(Request $request){
+
+                $getRanksdata = DB::table('ranks')
+                                ->where('id', '=', $request->rank_id)
+                                ->first();
+
+                $getRankByspRank = DB::table('ranks')
+                                ->where('rank_seq', '<', $getRanksdata->rank_seq)
+                                ->get();
+                                if(!empty($getRankByspRank)){
+
+                                    $dropdowns = '<option value="">Select Your Rank</option>';
+                                    foreach ($getRankByspRank as $row)
+                                    {
+                                        $dropdowns .= '<option value="'.$row->id.'">'.$row->rank_name.'</option>';
+                                    }
+
+
+
+                                    return  $dropdowns;
+                                }else{
+                                    return '0';
+                                }      
+                
+                       
+                
+                    }
 
 
 }
