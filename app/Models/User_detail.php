@@ -18,6 +18,8 @@ class User_detail extends Model
         'sponsor_code',
         'rank',
         'dob',
+        'gender',
+        'pan_no',
         'aadhar_no',
         'email',
         'phone_no',

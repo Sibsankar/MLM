@@ -66,6 +66,29 @@ class UserRegistrationController extends Controller
     {
         //dd($request->all());
 
+        $rules = [
+            'associate_name' => 'required',
+            'email' => 'required|email',
+            'phone_no' => 'required|min:10|max:10',
+            'referred_by' => 'required',
+            'rank' => 'required',
+            'dob' => 'required',
+            'aadhar_no' => 'required',
+            // 'pan_no' => 'required',
+            // 'gender' => 'required',
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field is required.'
+        ];
+
+        $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+        if ( $validator->fails() ) {
+            return Redirect::back()->withErrors($validator->errors());
+        }
+    
+
 
         if(strlen($request->phone_no)<10 || strlen($request->phone_no)>10){
             return Redirect::back()->withErrors(['msg' => 'Please enter valid 10 digit phone number']);
@@ -82,6 +105,7 @@ class UserRegistrationController extends Controller
         $getEmail = DB::table('user_details')
         ->where('email', '=', $request->email)
         ->first();
+
         if(!empty($getEmail)){
             return Redirect::back()->withErrors(['msg' => 'This email is already registered with us. Please login']);
         }
@@ -115,13 +139,15 @@ class UserRegistrationController extends Controller
             $userDetails->dob = date('Y-m-d', strtotime($request->dob));
             $userDetails->aadhar_no = $request->aadhar_no;
             $userDetails->phone_no = $request->phone_no;
+            // $userDetails->gender = $request->gender;
+            // $userDetails->pan_no = $request->pan_no;
 
             $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by: '';
 
             //dd($userDetails);
             $userDetails->save();
             
-            return redirect()->route('registration')->with('successmessage','You are successfully registered');
+            return redirect()->route('registration')->with('successmessage','You are successfully registered.');
         }
     }
 

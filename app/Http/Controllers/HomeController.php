@@ -45,12 +45,29 @@ class HomeController extends Controller
 
     public function changePwd(Request $request) {
         // dd($request->all());
+        $rules = [
+            'password' => 'required|min:6',
+            'cpassword' => 'required|min:6'
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field is required.'
+        ];
+
+        $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+        if ( $validator->fails() ) {
+            return \Redirect::back()->withErrors($validator->errors());
+        }
+
         if($request->password === $request->cpassword) {
             $user = User::find($request->user_id);
             $user->update([
                 'password' => Hash::make($request->password),
                 'pwd_status' => '1'
             ]);
+        } else {
+            return redirect()->route('home')->withErrors(['Password and Confirm Password does not match.']);
         }
         
         return redirect()->route('home')->with('successmessage','Password updated successfully');
@@ -70,9 +87,29 @@ class HomeController extends Controller
 
     public function updateProfile(Request $request) {
         // dd($request->all());
-        // $request->validate([
-        //     'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
-        // ]);
+
+        $rules = [
+            'associate_name' => 'required',
+            'email' => 'required|email',
+            //'phone_no' => 'required|min:10|max:10',
+            'referred_by' => 'required',
+            'rank' => 'required',
+            'dob' => 'required',
+            'aadhar_no' => 'required',
+            'image' => 'image|mimes:png,jpg,jpeg|max:2048',
+            'pan_no' => 'required',
+            'gender' => 'required',
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field is required.'
+        ];
+
+        $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+        if ( $validator->fails() ) {
+            return \Redirect::back()->withErrors($validator->errors());
+        }
 
         $user_details_data = [
             "associate_name" => $request->associate_name,
@@ -80,6 +117,8 @@ class HomeController extends Controller
             "dob" => $request->dob,
             "rank" => $request->rank,
             "aadhar_no" => $request->aadhar_no,
+            "pan_no" => $request->pan_no,
+            "gender" => $request->gender
         ];
 
         if(!empty($request->image)) {

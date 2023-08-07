@@ -79,6 +79,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="rank">Gender</label>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="male" name="gender" value="Male" {{($user->details[0]->gender == 'Male') ? 'checked' : ''}}>
+                            <label for="male" class="custom-control-label">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="female" name="gender" value="Female" {{($user->details[0]->gender == 'Female') ? 'checked' : ''}}>
+                            <label for="female" class="custom-control-label">Female</label>
+                            </div>
+                        </div>
                             
                         <div class="form-group">
                             <label for="rank">Rank</label>
@@ -87,6 +99,10 @@
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value={{$user->details[0]->aadhar_no }}>
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">PAN No</label>
+                            <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No" value={{$user->details[0]->pan_no }}>
                         </div>
                         <div class="form-group">
                             <label for="rank">Phone No</label>
@@ -98,6 +114,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="" id="image" name="image">
                                     <!-- <label class="custom-file-label" for="exampleInputFile">Choose file</label> -->
+                                    <p class="text-info custom-file-label">File type must be jpg, jpeg, png only</p>
                                 </div>
                                 <!-- <div class="input-group-append">
                                 <span class="input-group-text">Upload</span>
@@ -105,6 +122,7 @@
                                 @if($user->details[0]->image_path)
                                     <img src="{{$user->details[0]->image_path}}" width="100px"/>
                                 @endif
+                                
                             </div>
                         </div>
                         <input type="hidden" name="user_id" value={{$user->id}}>
