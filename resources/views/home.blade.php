@@ -31,12 +31,12 @@
                         <form method="POST" action="{{ route('updateProfile') }}" enctype='multipart/form-data'>
                         @csrf
                         <div class="card-body">
-
-                        <div style="border: 1px solid rgb(5 124 117); padding:15px">
+                            <input type="hidden" id="referred_by" name="referred_by" value="{{ isset($sponsorDetails[0]->user_id) ? $sponsorDetails[0]->user_id : '' }}">
+                        {{-- <div style="border: 1px solid rgb(5 124 117); padding:15px">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="exampleInputEmail1">Sponsor Code</label>
-                                    <input type="sponser_code" class="form-control" id="sponser_code" placeholder="Enter Sponsor Code">               
+                                    <input type="sponser_code" class="form-control" id="sponser_code" value="{{ isset($sponsorDetails[0]->sponsor_code) ? $sponsorDetails[0]->sponsor_code : '' }}" placeholder="Enter Sponsor Code">               
                                                 
                                     
                                 </div> 
@@ -45,19 +45,25 @@
                             <div class="row" id="spDiv" >
                                 <div class="form-group col-md-6">
                                     <label for="spName">Sponsor Name</label>
-                                    <input type="text" class="form-control" id="spName" readonly>
+                                    <input type="text" class="form-control" id="spName" value="{{ isset($sponsorDetails[0]->associate_name) ? $sponsorDetails[0]->associate_name : '' }}" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="spRank">Sponsor Rank</label>
-                                    <input type="text" class="form-control" id="spRank" readonly>
+                                    <input type="text" class="form-control" id="spRank" value="{{ isset($sponsorDetails[0]->rank) ? $sponsorDetails[0]->rank : '' }}" readonly>
                                 </div>
 
                             </div>
-                        </div>  
+                        </div>   --}}
+
+
                             
                         <div class="form-group">
                             <label for="associate_name">Name of Associate</label>
-                            <input type="text" class="form-control" name="associate_name" required id="associate_name" placeholder="Enter Name of Associate" value={{$user->details[0]->associate_name}}>
+                            <input type="text" class="form-control" name="associate_name" required id="associate_name" placeholder="Enter Name of Associate" value="{{$user->details[0]->associate_name}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="associate_name">Associate Code</label>
+                            <input type="text" class="form-control" readonly placeholder="Enter Name of Associate" value={{$user->details[0]->sponsor_code}}>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
@@ -67,20 +73,46 @@
                         <div class="form-group">
                             <label>Date of Birth:</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value={{$user->details[0]->dob}}/>
+                                <input type="text" class="form-control datetimepicker-input" name="dob" required data-target="#reservationdate" value="{{date('m/d/Y', strtotime($user->details[0]->dob))}}" >
                                 <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
-                            
+
                         <div class="form-group">
+                            <label for="rank">Gender</label>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="male" name="gender" value="Male" {{($user->details[0]->gender == 'Male') ? 'checked' : ''}}>
+                            <label for="male" class="custom-control-label">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="female" name="gender" value="Female" {{($user->details[0]->gender == 'Female') ? 'checked' : ''}}>
+                            <label for="female" class="custom-control-label">Female</label>
+                            </div>
+                        </div>
+                            
+                        {{-- <div class="form-group">
                             <label for="rank">Rank</label>
                             <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank" value={{$user->details[0]->rank}}>
-                        </div>
+                        </div> --}}
+                        <div class="form-group">
+                            <label>Select Rank</label>
+                            <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
+                              <option selected="selected">Select Rank</option>
+                              @foreach($rankData as $ranks)
+                              <option  value="{{$ranks->id}}" @if($sponsorDetails[0]->rank == $ranks->id) selected  @endif>{{$ranks->rank_name}}</option>
+                              @endforeach
+                              
+                            </select>
+                          </div>
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value={{$user->details[0]->aadhar_no }}>
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">PAN No</label>
+                            <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No" value={{$user->details[0]->pan_no }}>
                         </div>
                         <div class="form-group">
                             <label for="rank">Phone No</label>
@@ -90,8 +122,9 @@
                             <label for="image">Photo</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="image" name="image">
+                                    <input type="file" class="" id="image" name="image">
                                     <!-- <label class="custom-file-label" for="exampleInputFile">Choose file</label> -->
+                                    <p class="text-info custom-file-label">File type must be jpg, jpeg, png only</p>
                                 </div>
                                 <!-- <div class="input-group-append">
                                 <span class="input-group-text">Upload</span>
@@ -99,6 +132,7 @@
                                 @if($user->details[0]->image_path)
                                     <img src="{{$user->details[0]->image_path}}" width="100px"/>
                                 @endif
+                                
                             </div>
                         </div>
                         <input type="hidden" name="user_id" value={{$user->id}}>

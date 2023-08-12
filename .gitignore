@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/images
 /storage/*.key
 /vendor
 .env
@@ -10,6 +11,7 @@
 .env.production
 .phpunit.result.cache
 Homestead.json
+composer.lock
 Homestead.yaml
 auth.json
 npm-debug.log

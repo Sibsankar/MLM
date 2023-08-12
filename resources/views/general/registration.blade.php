@@ -7,7 +7,7 @@
 
   <!-- Main Sidebar Container -->
   
-
+  
   <!-- Content Wrapper. Contains page content -->
   <div >
     <!-- Content Header (Page header) -->
@@ -15,6 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
+            
             {{-- <h1 class="m-0">Joining Form</h1> --}}
           </div><!-- /.col -->
           {{-- <div class="col-sm-6">
@@ -34,6 +35,8 @@
         <!-- Small boxes (Stat box) -->
        <div class="mb-2 text-center">
         <img src="{{ url('/')}}/assets/dist/img/dva.jpeg" height="80" width="200" alt="">
+        <a href="{{ route('login') }}" class="btn btn-xl btn-success font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
+        
        </div>
         <!-- /.row -->
         <!-- Main row -->
@@ -45,9 +48,15 @@
               <div class="card-header">
                 <h3 class="card-title">Joining Form</h3>
               </div>
+              
               @if(session('successmessage'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{session('successmessage')}}
+                </div>
+                @endif
+                @if(session('temppassword'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('temppassword')}}
                 </div>
                 @endif
                 @if(count($errors))
@@ -62,14 +71,14 @@
               <form method="POST" action="{{ route('addUser') }}" enctype='multipart/form-data'>
                 @csrf
                 <div class="card-body">
-
+<input type="hidden" id="referred_by" name="referred_by" value="">
                 <div style="border: 1px solid rgb(5 124 117); padding:15px">
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="exampleInputEmail1">Sponsor Code</label>
                       <input type="sponser_code" class="form-control" id="sponser_code" placeholder="Enter Sponsor Code">               
-                                    
-                      <button type="button" class="btn btn-xs btn-success">Search</button> 
+                         <p id="jErr" style="color: red"></p>           
+                      <button type="button" class="btn btn-xs btn-success" onclick="getSponsorDetails()">Search</button> 
                     </div> 
 
                   </div>
@@ -108,16 +117,26 @@
                   </div>
                   
                   <div class="form-group">
-                    <label for="rank">Rank</label>
-                    <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank">
+                    <label>Select Rank</label>
+                    <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
+                      <option selected="selected">Select Rank</option>
+                      @foreach($rankData as $ranks)
+                      <option value="{{$ranks->id}}" >{{$ranks->rank_name}}</option>
+                      @endforeach
+                      
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="rank">Aadhar No</label>
                     <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No">
                   </div>
+                  <!-- <div class="form-group">
+                    <label for="rank">PAN No</label>
+                    <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No">
+                  </div> -->
                   <div class="form-group">
                     <label for="rank">Phone No</label>
-                    <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No">
+                    <input type="text" class="form-control phone" id="phone_no" maxlength="10" name="phone_no" required placeholder="Enter Phone No" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                   {{-- <div class="form-group">
                     <label for="exampleInputFile">Rank</label>
@@ -160,6 +179,100 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+<script type="text/javascript">
+
+function phoneMask(e){
+	var s=e.val();
+	var s=s.replace(/[_\W]+/g,'');
+	var n=s.length;
+	if(n<11){var m='(00) 0000-00000';}else{var m='(00) 00000-00000';}
+	$(e).mask(m);
+}
+
+// Type
+$('body').on('keyup','.phone',function(){	
+	phoneMask($(this));
+});
+
+// On load
+$('.phone').keyup();
+
+
+
+
+  function getSponsorDetails(){
+    var spCode = $('#sponser_code').val();
+    if(spCode==""){
+      $("#jErr").text('please enter sponsor code to get your sponsor details');
+      return false;
+    }else{
+      $("#jErr").text('');
+    }
+    var postForm = { //Fetch form data
+            'spcode'     : spCode 
+            
+        };
+      var url="{{ URL::to('') }}"+"/get-sponser-details";
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+    $.ajax({
+                type:'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url: url ,                
+                data: postForm,
+                datatype: 'JSON',
+                success: (response) => {
+                  
+                  if(response!='0'){
+                    
+                    $("#spName").val(response.associate_name);
+                    $("#spRank").val(response.rank);
+                    $("#referred_by").val(response.user_id);
+                    var postForm2 = { 
+                    'rank_id'     : response.rank 
+
+                    };
+                    var url2="{{ URL::to('') }}"+"/get-rank-details";
+              $.ajax({
+                type:'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url: url2 ,                
+                data: postForm2,
+                datatype: 'JSON',
+                success: (response) => {
+                  console.log(response);
+                  if(response!='0'){
+                   $("#rank").empty();
+                    $("#rank").append(response);                  
+
+                  }else{
+                    
+                  }
+                    
+                },
+                error: function(response){
+                    
+                }
+           });
+
+                  }else{
+                    
+                  }
+                    
+                },
+                error: function(response){
+                    
+                }
+           });
+    
+  }
+  
+</script>
 @endsection
 
 
