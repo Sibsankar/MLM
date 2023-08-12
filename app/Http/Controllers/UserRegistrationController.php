@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Redirect;
+use App\Service\SmsServiceInterface;
 
 class UserRegistrationController extends Controller
 {
@@ -19,9 +20,10 @@ class UserRegistrationController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SmsServiceInterface $smsService)
     {
         //$this->middleware('auth');
+        $this->smsService = $smsService;
     }
 
     /**
@@ -57,6 +59,7 @@ class UserRegistrationController extends Controller
     public function registration()
     { 
 
+        // dd($this->smsService->sendSMS());
         $getRanks = DB::table('ranks')->get();
         
         return view('general/registration')->with(['rankData'=>$getRanks]);
@@ -111,16 +114,13 @@ class UserRegistrationController extends Controller
             return Redirect::back()->withErrors(['msg' => 'This email is already registered with us. Please login']);
         }
 
-
-
-
         $first_nm = substr($request->associate_name, 0, 5);
         $string = str_replace('/', '', $request->dob);
         $tempPass=$first_nm.'@'.$string;
         $associateCode = "DVA".$first_nm.''.$string;
         //send sms
         $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. ". Login using your register mobile number and password ".$tempPass; 
-        if ($this->sendSMS($request->phone_no, $message)) {
+        // if ($this->smsService->sendSMS($request->phone_no, $message)) {
 
             $regiserUserId= User::create([
                 'name' => $request->associate_name,
@@ -149,29 +149,29 @@ class UserRegistrationController extends Controller
             $userDetails->save();
             
             return redirect()->route('registration')->with('successmessage','You are successfully registered.')->with('temppassword','Your auto generated password is - '.$tempPass.'. Please change your password after first login. Thank you');
-        }
+        // }
     }
 
-    public function sendSMS ($number, $message) {
-        $receiverNumber = "+919733962148"; // change to $number
+    // public function sendSMS ($number, $message) {
+    //     $receiverNumber = "+919733962148"; // change to $number
   
-        try {
+    //     try {
   
-            $account_sid = getenv("TWILIO_ACCOUNT_SID");
-            $auth_token = getenv("TWILIO_AUTH_TOKEN");
-            $twilio_number = getenv("TWILIO_SMS_FROM");
+    //         $account_sid = getenv("TWILIO_ACCOUNT_SID");
+    //         $auth_token = getenv("TWILIO_AUTH_TOKEN");
+    //         $twilio_number = getenv("TWILIO_SMS_FROM");
   
-            $client = new Client($account_sid, $auth_token);
-            $client->messages->create($receiverNumber, [
-                'from' => $twilio_number, 
-                'body' => $message]);
+    //         $client = new Client($account_sid, $auth_token);
+    //         $client->messages->create($receiverNumber, [
+    //             'from' => $twilio_number, 
+    //             'body' => $message]);
   
-            return true;
+    //         return true;
   
-        } catch (Exception $e) {
-            dd("Error: ". $e->getMessage());
-        }
-    }
+    //     } catch (Exception $e) {
+    //         dd("Error: ". $e->getMessage());
+    //     }
+    // }
 
 
     public function getSponser(Request $request){
