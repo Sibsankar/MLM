@@ -23,7 +23,8 @@ class User extends Authenticatable
         'email',
         'phone_no',
         'password',
-        'pwd_status'
+        'pwd_status',
+        'remember_token'
     ];
 
     protected $appends = ['details'];
@@ -35,7 +36,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
