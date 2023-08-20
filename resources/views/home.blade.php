@@ -124,7 +124,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="" id="image" name="image">
                                     <!-- <label class="custom-file-label" for="exampleInputFile">Choose file</label> -->
-                                    <p class="text-info custom-file-label">File type must be jpg, jpeg, png only</p>
+                                    <p class="text-info">File type must be jpg, jpeg, png only</p>
                                 </div>
                                 <!-- <div class="input-group-append">
                                 <span class="input-group-text">Upload</span>
