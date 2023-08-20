@@ -39,13 +39,13 @@ class HomeController extends Controller
 
         if(!empty($getSponsorDetails[0])) {
             $getUserData = DB::table('user_details')
-                            ->where('user_id', '=', $getSponsorDetails[0]->referred_by)
+                            ->where('user_id', '=', $getSponsorDetails[0]->referred_by) 
                             ->first();
     //dd($getUserData);
             $getRanks = DB::table('ranks')
                                     ->where('rank_seq', '<', $getUserData->rank)
                                     ->get();
-                                // dd($getRanks);
+                                 //dd($getRanks);
         }
         return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks ]);
     }
@@ -81,16 +81,28 @@ class HomeController extends Controller
     }
 
     public function myassociate()
-    {
-       
+    {      
          
-    $getSponsorDetails = DB::table('user_details as ud1')  
-    ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
-    ->where('ud1.user_id', \Auth::user()->id)
-    ->select('ud2.associate_name','ud2.rank','ud2.sponsor_code','ud2.user_id')->get();
-       // dd($getSponsorDetails[0]->associate_name);
-        return view('myassociate')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails ]);
+    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name',)
+    ->leftJoin('ranks as ranks', 'ud1.rank', '=', 'ranks.id') 
+    ->where('ud1.referred_by', \Auth::user()->id)
+    ->get();
+    //dd($getAssociatesDetails);
+
+        return view('myassociate')->with(['user' => \Auth::user(),'associatesDetails' =>$getAssociatesDetails ]);
     }
+
+public function viewProfile($id){
+    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name',)
+    ->leftJoin('ranks as ranks', 'ud1.rank', '=', 'ranks.id') 
+    ->where('ud1.user_id', $id)
+    ->first();
+    //dd($getAssociatesDetails);
+    return view('view_profile')->with(['user' => \Auth::user(),'associate' =>$getAssociatesDetails ]);
+
+}
+
+
 
     public function updateProfile(Request $request) {
         // dd($request->all());

@@ -80,7 +80,8 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-                                    <a class="dropdown-item border-top" href="{{ route('home') }}">Profile</a>
+                                    <a class="dropdown-item border-top" href="{{ route('home') }}">Edit Profile</a>
+                                    <a class="dropdown-item border-top" href="{{ route('viewProfile',['id'=>Auth::user()->id]) }}">View Profile</a>
                                     <a class="dropdown-item border-top" href="{{ route('my-associate') }}">My Associates</a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
