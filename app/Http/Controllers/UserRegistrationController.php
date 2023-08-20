@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Redirect;
+use App\Service\SmsServiceInterface;
 
 class UserRegistrationController extends Controller
 {
@@ -19,9 +20,10 @@ class UserRegistrationController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SmsServiceInterface $smsService)
     {
         //$this->middleware('auth');
+        $this->smsService = $smsService;
     }
 
     /**
@@ -57,6 +59,7 @@ class UserRegistrationController extends Controller
     public function registration()
     { 
 
+        // dd($this->smsService->sendSMS());
         $getRanks = DB::table('ranks')->get();
         
         return view('general/registration')->with(['rankData'=>$getRanks]);
@@ -111,16 +114,13 @@ class UserRegistrationController extends Controller
             return Redirect::back()->withErrors(['msg' => 'This email is already registered with us. Please login']);
         }
 
-
-
-
         $first_nm = substr($request->associate_name, 0, 5);
         $string = str_replace('/', '', $request->dob);
         $tempPass=$first_nm.'@'.$string;
         $associateCode = "DVA".$first_nm.''.$string;
         //send sms
         $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. ". Login using your register mobile number and password ".$tempPass; 
-        if ($this->sendSMS($request->phone_no, $message)) {
+        // if ($this->smsService->sendSMS($request->phone_no, $message)) {
 
             $regiserUserId= User::create([
                 'name' => $request->associate_name,
@@ -149,29 +149,29 @@ class UserRegistrationController extends Controller
             $userDetails->save();
             
             return redirect()->route('registration')->with('successmessage','You are successfully registered.')->with('temppassword','Your auto generated password is - '.$tempPass.'. Please change your password after first login. Thank you');
-        }
+        // }
     }
 
-    public function sendSMS ($number, $message) {
-        $receiverNumber = "+919733962148"; // change to $number
+    // public function sendSMS ($number, $message) {
+    //     $receiverNumber = "+919733962148"; // change to $number
   
-        try {
+    //     try {
   
-            $account_sid = getenv("TWILIO_ACCOUNT_SID");
-            $auth_token = getenv("TWILIO_AUTH_TOKEN");
-            $twilio_number = getenv("TWILIO_SMS_FROM");
+    //         $account_sid = getenv("TWILIO_ACCOUNT_SID");
+    //         $auth_token = getenv("TWILIO_AUTH_TOKEN");
+    //         $twilio_number = getenv("TWILIO_SMS_FROM");
   
-            $client = new Client($account_sid, $auth_token);
-            $client->messages->create($receiverNumber, [
-                'from' => $twilio_number, 
-                'body' => $message]);
+    //         $client = new Client($account_sid, $auth_token);
+    //         $client->messages->create($receiverNumber, [
+    //             'from' => $twilio_number, 
+    //             'body' => $message]);
   
-            return true;
+    //         return true;
   
-        } catch (Exception $e) {
-            dd("Error: ". $e->getMessage());
-        }
-    }
+    //     } catch (Exception $e) {
+    //         dd("Error: ". $e->getMessage());
+    //     }
+    // }
 
 
     public function getSponser(Request $request){
@@ -188,35 +188,158 @@ class UserRegistrationController extends Controller
         
                
         
+    }
+
+    public function getRankbySp(Request $request){
+
+        $getRanksdata = DB::table('ranks')
+                        ->where('id', '=', $request->rank_id)
+                        ->first();
+
+        $getRankByspRank = DB::table('ranks')
+                        ->where('rank_seq', '<', $getRanksdata->rank_seq)
+                        ->get();
+        if(!empty($getRankByspRank)){
+
+            $dropdowns = '<option value="">Select Your Rank</option>';
+            foreach ($getRankByspRank as $row)
+            {
+                $dropdowns .= '<option value="'.$row->id.'">'.$row->rank_name.'</option>';
             }
 
-            public function getRankbySp(Request $request){
-
-                $getRanksdata = DB::table('ranks')
-                                ->where('id', '=', $request->rank_id)
-                                ->first();
-
-                $getRankByspRank = DB::table('ranks')
-                                ->where('rank_seq', '<', $getRanksdata->rank_seq)
-                                ->get();
-                                if(!empty($getRankByspRank)){
-
-                                    $dropdowns = '<option value="">Select Your Rank</option>';
-                                    foreach ($getRankByspRank as $row)
-                                    {
-                                        $dropdowns .= '<option value="'.$row->id.'">'.$row->rank_name.'</option>';
-                                    }
 
 
+            return  $dropdowns;
+        }else{
+            return '0';
+        }      
+    }
 
-                                    return  $dropdowns;
-                                }else{
-                                    return '0';
-                                }      
-                
-                       
-                
-                    }
+    // Forgot password ------------------------------------------
+    public function forgot_password() {
+        return view('auth.forgotPwd.reset_pwd');
+    }
+
+    public function send_otp(Request $request) {
+        // dd($request->all());
+        $user = User::where('phone_no', $request->phone_no)->first();
+        if(!empty($user)){
+            $reset_otp = random_int(100000, 999999);
+            $message = "Your reset password OTP is ".$reset_otp. "."; 
+            // if ($this->smsService->sendSMS($request->phone_no, $message)) {
+                $user->update(['remember_token' => $reset_otp]);
+                $encPhone = $this->encryptStr($request->phone_no);
+                return redirect()->route('verify_otp', ['token' => $encPhone])->with('successmessage','OTP sent successfully - '.$reset_otp);
+            // }
+        } else {
+            return \Redirect::back()->withErrors(['Phone number not registered.']);
+        }
+    }
+
+    public function verify_otp(Request $request, $token=NULL) {
+        if ($request->isMethod('post')) {
+            // dd($request->all());
+            $decPhone = $this->decryptStr($request->token);
+            $user = User::where(['phone_no' => $decPhone, 'remember_token' => $request->remember_token])->first();
+            if(!empty($user)){
+                $encPhone = $this->encryptStr($decPhone.'~'.$request->remember_token);
+                return redirect()->route('reset_pwd', ['token' => $encPhone]);
+            } else {
+                return \Redirect::back()->withErrors(['Phone number and OTP not match.']);
+            }
+        }
+        if ($request->isMethod('get')) {
+            return view('auth.forgotPwd.verify_otp')->with(['token' => $request->token]);
+        }
+    }
+
+    public function reset_pwd($token) {
+        $decPhone = $this->decryptStr($token);
+        $data = explode("~", $decPhone);
+        $user = User::where(['phone_no' => $data[0], 'remember_token' => $data[1]])->first();
+        if(!empty($user)){
+            return view('auth.forgotPwd.update_pwd')->with(['token' => $token]);
+        } else {
+            return \Redirect::back()->withErrors(['Phone number and OTP not match.']);
+        }
+    }
+    
+    public function update_pwd(Request $request){
+        // dd($request->all());
+        $decPhone = $this->decryptStr($request->token);
+        $data = explode("~", $decPhone);
+        $user = User::where(['phone_no' => $data[0], 'remember_token' => $data[1]])->first();
+        if(!empty($user)){
+            $rules = [
+                'password' => 'required|min:6',
+                'cpassword' => 'required|min:6'
+            ];
+        
+            $customMessages = [
+                'required' => 'The :attribute field is required.'
+            ];
+
+            $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+            if ( $validator->fails() ) {
+                return \Redirect::back()->withErrors($validator->errors());
+            }
+
+            if($request->password === $request->cpassword) {
+                $user->update([
+                    'password' => Hash::make($request->password),
+                    'pwd_status' => '1',
+                    'remember_token' => NULL
+                ]);
+            } else {
+                return \Redirect::back()->withErrors(['Password and Confirm Password does not match.']);
+            }
+            
+            return redirect()->route('login')->with('successmessage','Password updated successfully');
+        }
+    }
+
+    public function encryptStr($str) {
+        // Store the cipher method
+        $ciphering = "AES-128-CTR";
+        
+        // Use OpenSSl Encryption method
+        $iv_length = openssl_cipher_iv_length($ciphering);
+        $options = 0;
+        
+        // Non-NULL Initialization Vector for encryption
+        $encryption_iv = '1234567891011121';
+        
+        // Store the encryption key
+        $encryption_key = "MLMPro";
+        
+        // Use openssl_encrypt() function to encrypt the data
+        $encryption = openssl_encrypt($str, $ciphering,
+                    $encryption_key, $options, $encryption_iv);
+
+        return $encryption;
+    }
+
+    public function decryptStr($str) {
+        // Store the cipher method
+        $ciphering = "AES-128-CTR";
+        
+        // Use OpenSSl Encryption method
+        $iv_length = openssl_cipher_iv_length($ciphering);
+        $options = 0;
+
+        // Non-NULL Initialization Vector for decryption
+        $decryption_iv = '1234567891011121';
+        
+        // Store the decryption key
+        $decryption_key = "MLMPro";
+        
+        // Use openssl_decrypt() function to decrypt the data
+        $decryption=openssl_decrypt ($str, $ciphering,
+                $decryption_key, $options, $decryption_iv);
+
+        return $decryption;
+    }
 
 
 }
