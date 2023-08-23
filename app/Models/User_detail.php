@@ -32,7 +32,22 @@ class User_detail extends Model
         'city',
         'pin',
         'referred_by',
-        'image'
+        'image',
+        'guardians_name',
+        'district',
+        'nominee_Name',
+        'relation_with_nominee',
+        'account_holder_name',
+        'bank_name',
+        'branch_name',
+        'account_number',
+        'ifc_code',
+        'city_name',
+        'pin',
+        'country_name',
+        'state_name',
+        'address_line1',
+        'address_line2'
     ];
 
     protected $appends = ['image_path'];

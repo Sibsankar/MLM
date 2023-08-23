@@ -63,11 +63,11 @@
                         </div>
                         <div class="form-group">
                             <label for="associate_name">Associate Code</label>
-                            <input type="text" class="form-control" readonly placeholder="Enter Name of Associate" value={{$user->details[0]->sponsor_code}}>
+                            <input type="text" class="form-control" readonly placeholder="Enter Name of Associate" value="{{$user->details[0]->sponsor_code}}">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" required value={{$user->email}}>
+                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email" required value="{{$user->email}}">
                         </div>
                             
                         <div class="form-group">
@@ -108,15 +108,15 @@
                           </div>
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
-                            <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value={{$user->details[0]->aadhar_no }}>
+                            <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value="{{$user->details[0]->aadhar_no }}">
                         </div>
                         <div class="form-group">
                             <label for="rank">PAN No</label>
-                            <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No" value={{$user->details[0]->pan_no }}>
+                            <input type="text" class="form-control" id="pan_no" name="pan_no" required placeholder="Enter PAN No" value="{{$user->details[0]->pan_no }}">
                         </div>
                         <div class="form-group">
                             <label for="rank">Phone No</label>
-                            <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No" value={{$user->phone_no }} disabled>
+                            <input type="text" class="form-control" id="phone_no" name="phone_no" required placeholder="Enter Phone No" value="{{$user->phone_no }}" disabled>
                         </div>
                         <div class="form-group">
                             <label for="image">Photo</label>
@@ -135,7 +135,75 @@
                                 
                             </div>
                         </div>
-                        <input type="hidden" name="user_id" value={{$user->id}}>
+<h1>Personal Details</h1>
+                        <div class="form-group">
+                            <label for="rank">Father's /Husband's Name</label>
+                            <input type="text" class="form-control" id="guardians_name" name="guardians_name" required placeholder="Enter Father's /Husband's Name" value="{{$user->details[0]->guardians_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Address Line 1</label>
+                            <input type="text" class="form-control" id="address_line1" name="address_line1" required placeholder="Enter Address" value="{{$user->details[0]->address_line1 }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Address Line 2</label>
+                            <input type="text" class="form-control" id="address_line2" name="address_line2" required placeholder="Enter Address" value="{{$user->details[0]->address_line2 }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">City</label>
+                            <input type="text" class="form-control" id="city_name" name="city_name" required placeholder="Enter City" value="{{$user->details[0]->city_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">District</label>
+                            <input type="text" class="form-control" id="district" name="district" required placeholder="Enter District" value="{{$user->details[0]->district }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">State</label>
+                            <input type="text" class="form-control" id="state_name" name="state_name" required placeholder="Enter state" value="{{$user->details[0]->state_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Country</label>
+                            <input type="text" class="form-control" id="country_name" name="country_name" required placeholder="Enter country" value="{{$user->details[0]->country_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Pin</label>
+                            <input type="text" class="form-control" id="pin" name="pin" required placeholder="Enter pin" value="{{$user->details[0]->pin }}">
+                        </div>
+
+                        <h1>Nominee Details</h1>
+                        <div class="form-group">
+                            <label for="rank">Nominee Name</label>
+                            <input type="text" class="form-control" id="nominee_Name" name="nominee_Name" required placeholder="Enter Nominee Name" value="{{$user->details[0]->nominee_Name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Relationship with nominee</label>
+                            <input type="text" class="form-control" id="relation_with_nominee" name="relation_with_nominee" required placeholder="Enter Relationship with nominee" value="{{$user->details[0]->relation_with_nominee }}">
+                        </div>
+
+                        <h1>Bank Details:</h1>
+                        <div class="form-group">
+                            <label for="rank">A/c Holder Name</label>
+                            <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" required placeholder="Enter A/c Holder Name" value="{{$user->details[0]->account_holder_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Bank Name</label>
+                            <input type="text" class="form-control" id="bank_name" name="bank_name" required placeholder="Enter Bank Name" value="{{$user->details[0]->bank_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Branch Name</label>
+                            <input type="text" class="form-control" id="branch_name" name="branch_name" required placeholder="Enter Branch Name" value="{{$user->details[0]->branch_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">A/c No</label>
+                            <input type="text" class="form-control" id="account_number" name="account_number" required placeholder="Enter A/c No" value="{{$user->details[0]->account_number }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">IFS Code</label>
+                            <input type="text" class="form-control" id="ifc_code" name="ifc_code" required placeholder="Enter IFS Code" value="{{$user->details[0]->ifc_code }}">
+                        </div>
+                       
+
+                        
+                        <input type="hidden" name="user_id" value="{{$user->id}}">
                         <!-- /.card-body -->
 
                         <div class="card-footer mt-2">

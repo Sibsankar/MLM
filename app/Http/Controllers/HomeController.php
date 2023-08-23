@@ -137,7 +137,22 @@ public function viewProfile($id){
             "rank" => $request->rank,
             "aadhar_no" => $request->aadhar_no,
             "pan_no" => $request->pan_no,
-            "gender" => $request->gender
+            "gender" => $request->gender,
+            "guardians_name" =>$request->district,
+            "district" =>$request->district,
+            "nominee_Name" =>$request->nominee_Name,
+            "relation_with_nominee" =>$request->relation_with_nominee,
+            "account_holder_name" =>$request->account_holder_name,
+            "bank_name" =>$request->bank_name,
+            "branch_name" =>$request->branch_name,
+            "account_number" =>$request->account_number,
+            "ifc_code" =>$request->ifc_code,
+            "city_name" =>$request->city_name,
+            "pin" =>$request->pin,
+            "country_name" =>$request->country_name,
+            "state_name" =>$request->state_name,
+            "address_line1" =>$request->address_line1,
+            "address_line2" =>$request->address_line2
         ];
 
         if(!empty($request->image)) {
