@@ -175,14 +175,16 @@ class UserRegistrationController extends Controller
 
 
     public function getSponser(Request $request){
-        $getUserData = DB::table('user_details')
-                        ->where('sponsor_code', '=', $request->spcode)
+        $getUserData = DB::table('user_details')->select('user_details.associate_name','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
+                        ->where('user_details.sponsor_code', '=', $request->spcode)
                         ->first();
-        if(!empty($getUserData)){
-            return  $getUserData;
-        }else{
-            return '0';
-        }      
+
+                        if(!empty($getUserData)){
+                            return  $getUserData;
+                        }else{
+                            return '0';
+                        }      
         
                
         

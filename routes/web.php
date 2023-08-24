@@ -24,6 +24,7 @@ Route::any('/forgot-password/verify-otp/{token?}', [App\Http\Controllers\UserReg
 Route::get('/reset-password/{token}', [App\Http\Controllers\UserRegistrationController::class, 'reset_pwd'])->name('reset_pwd');
 Route::post('/update-password', [App\Http\Controllers\UserRegistrationController::class, 'update_pwd'])->name('update_pwd');
 
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -35,3 +36,4 @@ Route::post('/add-user', [App\Http\Controllers\UserRegistrationController::class
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/change-pwd', [App\Http\Controllers\HomeController::class, 'changePwd'])->name('updatePwd');
 Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myassociate'])->name('my-associate');
+Route::get('/view-profile/{id}', [App\Http\Controllers\HomeController::class, 'viewProfile'])->name('viewProfile');

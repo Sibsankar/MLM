@@ -231,7 +231,7 @@ $.ajaxSetup({
                   if(response!='0'){
                     
                     $("#spName").val(response.associate_name);
-                    $("#spRank").val(response.rank);
+                    $("#spRank").val(response.rank_name);
                     $("#referred_by").val(response.user_id);
                     var postForm2 = { 
                     'rank_id'     : response.rank 
