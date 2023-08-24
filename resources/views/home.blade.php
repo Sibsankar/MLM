@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12S">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Edit Profile') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -32,28 +32,7 @@
                         @csrf
                         <div class="card-body">
                             <input type="hidden" id="referred_by" name="referred_by" value="{{ isset($sponsorDetails[0]->user_id) ? $sponsorDetails[0]->user_id : '' }}">
-                        {{-- <div style="border: 1px solid rgb(5 124 117); padding:15px">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleInputEmail1">Sponsor Code</label>
-                                    <input type="sponser_code" class="form-control" id="sponser_code" value="{{ isset($sponsorDetails[0]->sponsor_code) ? $sponsorDetails[0]->sponsor_code : '' }}" placeholder="Enter Sponsor Code">               
-                                                
-                                    
-                                </div> 
-                                <div class="col-md-6"><button type="button" class="btn btn-xs btn-success mt-4">Search</button> </div>
-                            </div>
-                            <div class="row" id="spDiv" >
-                                <div class="form-group col-md-6">
-                                    <label for="spName">Sponsor Name</label>
-                                    <input type="text" class="form-control" id="spName" value="{{ isset($sponsorDetails[0]->associate_name) ? $sponsorDetails[0]->associate_name : '' }}" readonly>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="spRank">Sponsor Rank</label>
-                                    <input type="text" class="form-control" id="spRank" value="{{ isset($sponsorDetails[0]->rank) ? $sponsorDetails[0]->rank : '' }}" readonly>
-                                </div>
-
-                            </div>
-                        </div>   --}}
+                            
 
 
                             
@@ -96,7 +75,7 @@
                             <label for="rank">Rank</label>
                             <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Rank" value={{$user->details[0]->rank}}>
                         </div> --}}
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Select Rank</label>
                             <select id="rank" name="rank" class="form-control select2" style="width: 100%;">
                               <option selected="selected">Select Rank</option>
@@ -105,7 +84,11 @@
                               @endforeach
                               
                             </select>
-                          </div>
+                          </div> --}}
+                          <div class="form-group">
+                            <label for="rank">Rank</label>
+                            <input type="text" class="form-control" id="" name="" readonly  value="{{$rankData->rank_name }}">
+                        </div>
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
                             <input type="text" class="form-control" id="aadhar_no" name="aadhar_no" required placeholder="Enter Aadhar No" value="{{$user->details[0]->aadhar_no }}">
@@ -178,6 +161,33 @@
                             <label for="rank">Relationship with nominee</label>
                             <input type="text" class="form-control" id="relation_with_nominee" name="relation_with_nominee" required placeholder="Enter Relationship with nominee" value="{{$user->details[0]->relation_with_nominee }}">
                         </div>
+
+
+                        <h1>Sponser Details</h1>
+
+                        <div style="border: 1px solid rgb(5 124 117); padding:15px">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="exampleInputEmail1">Sponsor Code</label>
+                                    <input type="sponser_code" class="form-control" id="sponser_code" value="{{ isset($sponsorDetails[0]->sponsor_code) ? $sponsorDetails[0]->sponsor_code : '' }}" placeholder="Enter Sponsor Code" readonly>               
+                                                
+                                    
+                                </div> 
+                                
+                            </div>
+                            <div class="row" id="spDiv" >
+                                <div class="form-group col-md-6">
+                                    <label for="spName">Sponsor Name</label>
+                                    <input type="text" class="form-control" id="spName" value="{{ isset($sponsorDetails[0]->associate_name) ? $sponsorDetails[0]->associate_name : '' }}" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="spRank">Sponsor Rank</label>
+                                    <input type="text" class="form-control" id="spRank" value="{{ isset($sponsorDetails[0]->rank_name) ? $sponsorDetails[0]->rank_name : '' }}" readonly>
+                                </div>
+
+                            </div>
+                        </div> 
+                        <br>
 
                         <h1>Bank Details:</h1>
                         <div class="form-group">

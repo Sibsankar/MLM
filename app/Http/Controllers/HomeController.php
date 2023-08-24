@@ -35,17 +35,19 @@ class HomeController extends Controller
         ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
         ->where('ud1.user_id', \Auth::user()->id)
         ->select('ud1.associate_name','ud1.rank','ud1.sponsor_code','ud1.user_id','ud1.referred_by')->get();
-        //dd($getSponsorDetails);
 
         if(!empty($getSponsorDetails[0])) {
-            $getUserData = DB::table('user_details')
-                            ->where('user_id', '=', $getSponsorDetails[0]->referred_by) 
-                            ->first();
-    //dd($getUserData);
+            $userData = \Auth::user();
+
+                            $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
+                        ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
+                        ->get();
+    
             $getRanks = DB::table('ranks')
-                                    ->where('rank_seq', '<', $getUserData->rank)
-                                    ->get();
-                                 //dd($getRanks);
+                                    ->where('rank_seq', '=', $userData->details[0]->rank)
+                                    ->first();
+                               
         }
         return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks ]);
     }
@@ -109,10 +111,7 @@ public function viewProfile($id){
 
         $rules = [
             'associate_name' => 'required',
-            'email' => 'required|email',
-            //'phone_no' => 'required|min:10|max:10',
-            'referred_by' => 'required',
-            'rank' => 'required',
+            'email' => 'required|email',           
             'dob' => 'required',
             'aadhar_no' => 'required',
             'image' => 'image|mimes:png,jpg,jpeg|max:2048',
@@ -133,8 +132,7 @@ public function viewProfile($id){
         $user_details_data = [
             "associate_name" => $request->associate_name,
             "email" =>  $request->email,
-            "dob" => date('Y-m-d', strtotime($request->dob)),
-            "rank" => $request->rank,
+            "dob" => date('Y-m-d', strtotime($request->dob)),            
             "aadhar_no" => $request->aadhar_no,
             "pan_no" => $request->pan_no,
             "gender" => $request->gender,
