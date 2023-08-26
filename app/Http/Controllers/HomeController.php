@@ -30,16 +30,9 @@ class HomeController extends Controller
     public function index()
     {
         //dd(\Auth::user()->id);  
-        $getRanks = [];
-        $getSponsorDetails = DB::table('user_details as ud1')  
-        ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
-        ->where('ud1.user_id', \Auth::user()->id)
-        ->select('ud1.associate_name','ud1.rank','ud1.sponsor_code','ud1.user_id','ud1.referred_by')->get();
-
-        if(!empty($getSponsorDetails[0])) {
-            $userData = \Auth::user();
-
-                            $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        $getRanks = [];       
+        $userData = \Auth::user();
+       $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
         ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
                         ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
                         ->get();
@@ -47,8 +40,8 @@ class HomeController extends Controller
             $getRanks = DB::table('ranks')
                                     ->where('rank_seq', '=', $userData->details[0]->rank)
                                     ->first();
-                               
-        }
+            //dd($getRanks);                   
+        
         return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks ]);
     }
 
