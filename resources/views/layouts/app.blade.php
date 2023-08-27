@@ -94,10 +94,15 @@
                 </div>
             </div>
         </nav>
-
+        @auth
+        @include('layouts.sidebar')
+        @endauth
         <main class="py-4">
             @yield('content')
         </main>
+        @auth
+        @include('layouts.footer')
+        @endauth
         <script>
         //Date picker
         $('#reservationdate').datetimepicker({
