@@ -37,3 +37,4 @@ Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'upd
 Route::post('/change-pwd', [App\Http\Controllers\HomeController::class, 'changePwd'])->name('updatePwd');
 Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myassociate'])->name('my-associate');
 Route::get('/view-profile/{id}', [App\Http\Controllers\HomeController::class, 'viewProfile'])->name('viewProfile');
+Route::post('/get-cities', [App\Http\Controllers\HomeController::class, 'getCities'])->name('getCities');

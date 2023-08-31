@@ -25,7 +25,8 @@
   <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('/')}}/assets/dist/css/adminlte.min.css">
-
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- daterangepicker -->
@@ -106,7 +107,7 @@
         });
 </script>
     </div>
-</body>
+
  <!-- daterangepicker -->
  <script src="{{ url('/')}}/assets/plugins/jquery/jquery.min.js"></script>
  <!-- jQuery UI 1.11.4 -->
@@ -115,6 +116,8 @@
      <script src="{{ url('/')}}/assets/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ url('/')}}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="{{ url('/')}}/assets/plugins/select2/js/select2.full.min.js"></script>
 <!-- ChartJS -->
 <script src="{{ url('/')}}/assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
@@ -147,5 +150,22 @@
 
     });
     
+
+    $('.select2').select2()
+    $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+    
+
+  })
+
+  
 </script>
+</body>
 </html>
