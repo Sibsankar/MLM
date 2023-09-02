@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImportExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,13 @@ Route::post('/forgot-password/send-otp', [App\Http\Controllers\UserRegistrationC
 Route::any('/forgot-password/verify-otp/{token?}', [App\Http\Controllers\UserRegistrationController::class, 'verify_otp'])->name('verify_otp');
 Route::get('/reset-password/{token}', [App\Http\Controllers\UserRegistrationController::class, 'reset_pwd'])->name('reset_pwd');
 Route::post('/update-password', [App\Http\Controllers\UserRegistrationController::class, 'update_pwd'])->name('update_pwd');
+
+// Import export routes
+Route::controller(ImportExportController::class)->group(function(){
+    Route::get('import_users', 'importExport')->name('importUsers');
+    Route::post('import', 'import')->name('import');
+    // Route::get('export', 'export')->name('export');
+});
 
 
 Auth::routes();
