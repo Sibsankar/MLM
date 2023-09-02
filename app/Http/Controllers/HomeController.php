@@ -30,28 +30,44 @@ class HomeController extends Controller
     public function index()
     {
         //dd(\Auth::user()->id);  
-        $getRanks = [];
-        $getSponsorDetails = DB::table('user_details as ud1')  
-        ->join('user_details as ud2','ud1.referred_by', '=', 'ud2.user_id') 
-        ->where('ud1.user_id', \Auth::user()->id)
-        ->select('ud1.associate_name','ud1.rank','ud1.sponsor_code','ud1.user_id','ud1.referred_by')->get();
-
-        if(!empty($getSponsorDetails[0])) {
-            $userData = \Auth::user();
-
-                            $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        $StateData= DB::table('all_states')->get();
+        $cityData= DB::table('all_cities')->get();
+        //dd($StateData);
+        $getRanks = [];       
+        $userData = \Auth::user();
+        $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
         ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
                         ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
                         ->get();
     
-            $getRanks = DB::table('ranks')
+        $getRanks = DB::table('ranks')
                                     ->where('rank_seq', '=', $userData->details[0]->rank)
                                     ->first();
-                               
-        }
-        return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks ]);
+                            
+        
+        return view('home')->with(['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks,'StateData'=>$StateData,'cityData'=>$cityData ]);
     }
+    public function getCities(Request $request){
 
+        $getCitiesdata = DB::table('all_cities')
+                        ->where('state_code', '=', $request->state_code)
+                        ->get();
+
+      
+        if(!empty($getCitiesdata)){
+
+            $dropdowns = '<option value="">Select Your City</option>';
+            foreach ($getCitiesdata as $row)
+            {
+              
+                $dropdowns .= '<option value="' . $row->city_code . '"' . ($request->cityId==$row->city_code ? ' selected' : '') . '>'.$row->city_name.'</option>';
+            }
+
+            return  $dropdowns;
+        }else{
+            return '0';
+        }      
+    }
     public function changePwd(Request $request) {
         // dd($request->all());
         $rules = [

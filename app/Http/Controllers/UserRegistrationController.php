@@ -145,7 +145,7 @@ class UserRegistrationController extends Controller
 
             $userDetails->referred_by = ($request->referred_by != '') ? $request->referred_by: '';
 
-            //dd($userDetails);
+           // dd($userDetails);
             $userDetails->save();
             
             return redirect()->route('registration')->with('successmessage','You are successfully registered.')->with('temppassword','Your auto generated password is - '.$tempPass.'. Please change your password after first login. Thank you');
@@ -175,7 +175,7 @@ class UserRegistrationController extends Controller
 
 
     public function getSponser(Request $request){
-        $getUserData = DB::table('user_details')->select('user_details.associate_name','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        $getUserData = DB::table('user_details')->select('user_details.associate_name','user_details.user_id','user_details.rank','ranks.rank_name','ranks.rank_seq')
         ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
                         ->where('user_details.sponsor_code', '=', $request->spcode)
                         ->first();

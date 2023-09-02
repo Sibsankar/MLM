@@ -87,7 +87,7 @@
                           </div> --}}
                           <div class="form-group">
                             <label for="rank">Rank</label>
-                            <input type="text" class="form-control" id="" name="" readonly  value="{{$rankData->rank_name }}">
+                            <input type="text" class="form-control" id="" name="" readonly  value="{{ $rankData->rank_name }}">
                         </div>
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
@@ -131,22 +131,48 @@
                             <label for="rank">Address Line 2</label>
                             <input type="text" class="form-control" id="address_line2" name="address_line2" required placeholder="Enter Address" value="{{$user->details[0]->address_line2 }}">
                         </div>
+                        
+                       
+                        
                         <div class="form-group">
-                            <label for="rank">City</label>
-                            <input type="text" class="form-control" id="city_name" name="city_name" required placeholder="Enter City" value="{{$user->details[0]->city_name }}">
+                            <label for="rank">Country</label>
+                            <input type="text" readonly class="form-control" id="country_name" name="country_name" required placeholder="Enter country" value="{{$user->details[0]->country_name }}">
                         </div>
+
                         <div class="form-group">
-                            <label for="rank">District</label>
-                            <input type="text" class="form-control" id="district" name="district" required placeholder="Enter District" value="{{$user->details[0]->district }}">
-                        </div>
-                        <div class="form-group">
+                            <label>Select State</label>
+                            <select id="State" name="state_name" class="form-control select2" style="width: 100%;" onchange="getCity(this.value)">
+                              <option selected="selected">Select State</option>
+                              @foreach($StateData as $states)
+                              <option <?php if($states->state_code==$user->details[0]->state_name){echo 'selected'; } ?> value="{{$states->state_code}}" >{{$states->state_name}}</option>
+                              @endforeach
+                              
+                            </select>
+                          </div>
+                          <input type="hidden" id="cityId" value="{{$user->details[0]->city_name }}">
+                          <div class="form-group">
+                            <label>Select City</label>
+                            <select id="city_name" name="city_name" class="form-control select2" style="width: 100%;">
+                              <option selected="selected">Select City</option>
+                              @foreach($cityData as $cities)
+                              <option <?php if($cities->city_code==$user->details[0]->city_name){echo 'selected'; } ?> value="{{$cities->city_code}}" >{{$cities->city_name}}</option>
+                              @endforeach
+                              
+                            </select>
+                          </div>
+                        {{-- <div class="form-group">
                             <label for="rank">State</label>
                             <input type="text" class="form-control" id="state_name" name="state_name" required placeholder="Enter state" value="{{$user->details[0]->state_name }}">
                         </div>
                         <div class="form-group">
-                            <label for="rank">Country</label>
-                            <input type="text" class="form-control" id="country_name" name="country_name" required placeholder="Enter country" value="{{$user->details[0]->country_name }}">
+                            <label for="rank">City</label>
+                            <input type="text" class="form-control" id="city_name" name="city_name" required placeholder="Enter City" value="{{$user->details[0]->city_name }}">
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="rank">District</label>
+                            <input type="text" class="form-control" id="district" name="district" required placeholder="Enter District" value="{{$user->details[0]->district }}">
                         </div>
+
                         <div class="form-group">
                             <label for="rank">Pin</label>
                             <input type="text" class="form-control" id="pin" name="pin" required placeholder="Enter pin" value="{{$user->details[0]->pin }}">
@@ -250,4 +276,44 @@
         </div>
     </div>
 </div>
+<script>
+function getCity(stateCode){
+    var cityId = $("#cityId").val();
+    //alert(cityId);
+    var url="{{ URL::to('') }}"+"/get-cities";
+    var postForm = { //Fetch form data
+            'state_code'     : stateCode,
+            'cityId' : cityId
+            
+        };
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$.ajax({
+                type:'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                url: url ,                
+                data: postForm,
+                datatype: 'JSON',
+                success: (response) => {
+                  console.log(response);
+                  if(response!='0'){
+                    $("#city_name").empty();
+                  $("#city_name").append(response);                  
+
+                  }else{
+                    
+                  }
+                    
+                },
+                error: function(response){
+                    
+                }
+           });
+
+    }</script>
 @endsection
+
