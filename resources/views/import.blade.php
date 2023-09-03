@@ -71,7 +71,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="file">File:</label>
-                            <input id="file" type="file" name="file" class="form-control">
+                            <input id="file" type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
                         </div>
                         <button class="btn btn-success">Import File</button>
                     </form>
