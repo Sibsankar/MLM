@@ -37,6 +37,11 @@
             <p>My Associates</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ route('addCommissionCategory') }}" class="nav-link">
+            <p>Commission Category</p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

@@ -46,3 +46,7 @@ Route::post('/change-pwd', [App\Http\Controllers\HomeController::class, 'changeP
 Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myassociate'])->name('my-associate');
 Route::get('/view-profile/{id}', [App\Http\Controllers\HomeController::class, 'viewProfile'])->name('viewProfile');
 Route::post('/get-cities', [App\Http\Controllers\HomeController::class, 'getCities'])->name('getCities');
+
+Route::get('/rank', [App\Http\Controllers\RankController::class, 'index'])->name('rank');
+Route::get('/addCommissionCategory', [App\Http\Controllers\RankController::class, 'addCommissionCategory'])->name('addCommissionCategory');
+Route::post('/addCategory', [App\Http\Controllers\RankController::class, 'addCategory'])->name('addCategory');

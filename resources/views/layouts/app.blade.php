@@ -101,23 +101,18 @@
                 </div>
             </div>
         </nav>
+       
+        <main class="py-4">
         @auth
         @include('layouts.sidebar')
         @endauth
-        <main class="py-4">
-            
             @yield('content')
         </main>
         @auth
         @include('layouts.footer')
         @endauth
-        <script>
-        //Date picker
-        $('#reservationdate').datetimepicker({
-            format: 'L'
-        });
-</script>
-    </div>
+        
+   
 
  <!-- daterangepicker -->
  <script src="{{ url('/')}}/assets/plugins/jquery/jquery.min.js"></script>
@@ -154,6 +149,12 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ url('/')}}/assets/dist/js/pages/dashboard.js"></script>
 <script>
+
+
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+
     $('#reservationdate').datetimepicker({
         format:'L',
         dateFormat: 'yy-mm-dd',
