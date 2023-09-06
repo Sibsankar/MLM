@@ -87,7 +87,7 @@
                           </div> --}}
                           <div class="form-group">
                             <label for="rank">Rank</label>
-                            <input type="text" class="form-control" id="" name="" readonly  value="{{ $rankData->rank_name }}">
+                            <input type="text" class="form-control" id="" name="" readonly  value="{{ ($rankData) ? $rankData->rank_name : '' }}">
                         </div>
                         <div class="form-group">
                             <label for="rank">Aadhar No</label>
