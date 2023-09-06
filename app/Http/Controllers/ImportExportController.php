@@ -17,7 +17,20 @@ class ImportExportController extends Controller
         return Excel::download(new ExportUsers, 'users.xlsx');
     }
 
-    public function import() {
+    public function import(Request $request) {
+        $rules = [
+            'file' => 'required|mimes:xls,xlsx,csv',
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field is required.'
+        ];
+
+        $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+        if ( $validator->fails() ) {
+            return \Redirect::back()->withErrors($validator->errors());
+        }
         try {
             $userCount = Excel::import(new ImportUsers, request()->file('file'));
         } catch (\Exception $e){
