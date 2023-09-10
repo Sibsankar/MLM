@@ -6,7 +6,7 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Commission Category</h3>
+              <h3 class="card-title">Commission Type</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -14,6 +14,7 @@
                 <thead>
                   <tr>
                     <th style="width: 10px">#</th>
+                    <th>Type</th>
                     <th>Category</th>
                    
                     <th style="width: 40px">Status</th>
@@ -22,16 +23,17 @@
                 </thead>
                 <tbody>
 
-                  @foreach($catData as $key =>$cats)
+                  @foreach($typeData as $key =>$types)
                   <tr>
                     <td>{{$key+1}}</td>
-                    <td>{{ $cats->name}}</td>
-                    <?php if($cats->status==1){?>
+                    <td>{{ $types->type_name}}</td>
+                    <td>{{ $types->catName}}</td>
+                    <?php if($types->status==1){?>
                     <td><span class="badge bg-success">Active</span></td>
                     <?php }else{ ?>
                       <td><span class="badge bg-danger">Inactive</span></td>
                       <?php } ?>
-                    <td><a href="javascript:void(0)" onclick="editCategory('{{ $cats->id }}','{{ $cats->name }}','{{ $cats->status }}')" class="btn btn-primary btn-sm">Edit</a></td>
+                    <td><a href="javascript:void(0)" onclick="editType('{{ $types->id }}','{{ $types->category_id }}','{{ $types->type_name }}','{{ $types->status }}')" class="btn btn-primary btn-sm">Edit</a></td>
                   </tr>
                 @endforeach
                 </tbody>
@@ -50,7 +52,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-12" >
                     <div class="card">
-                        <div class="card-header">{{ __('Commission Category') }}</div>
+                        <div class="card-header">{{ __('Commission Type') }}</div>
         
                         <div class="card-body" style="max-height:75vh; overflow-y:scroll;">
                             @if (session('status'))
@@ -71,16 +73,24 @@
                                 @endforeach
                             @endif
                            
-                                <p class="h4">Add Commission Categories</p>
+                                <p class="h4">Add Commission Type</p>
                                 <!-- form start -->
-                                <form method="POST" action="{{ route('addCategory') }}" enctype='multipart/form-data'>
+                                <form method="POST" action="{{ route('addType') }}" enctype='multipart/form-data'>
                                 @csrf
                                 <div class="card-body">
-        
+                                  <div class="form-group">
+                                    <label>Select Commission Category</label>
+                                    <select class="form-control" name="category_id" id="comm_cat">
+                                      <option value="0">Select</option>
+                                      @foreach($catData as $cat)
+                                      <option value="{{ $cat->id }}">{{ $cat->name }} </option>
+                                    @endforeach
+                                    </select>
+                                  </div>
                                     
                                 <div class="form-group">
-                                    <label for="associate_name">Commission Category</label>
-                                    <input type="text" class="form-control" name="name" required id="name" placeholder="Enter Commission Category Name" value="">
+                                    <label for="type_name">Commission Type</label>
+                                    <input type="text" class="form-control" name="type_name" required id="type_name" placeholder="Enter Commission Type Name" value="">
                                 </div>
                                
                                 <div class="form-group">
@@ -96,7 +106,7 @@
                                 </div>
                                     
                              
-                                <input type="hidden" name="update_cat_id" id="update_cat_id" value="">
+                                <input type="hidden" name="update_Type_id" id="update_Type_id" value="">
                                 <!-- /.card-body -->
         
                                 <div class="card-footer mt-2">
@@ -121,10 +131,12 @@
 </div>
 <script>
 
-  function editCategory(id,name,status){
+  function editType(id,cat_id,name,status){
   //alert(name);
  $("#name").val(name);
- $("#update_cat_id").val(id);
+ $("#update_Type_id").val(id);
+ $("#comm_cat").val(cat_id);
+ $("#type_name").val(name);
  //$("input[name=status][value='"+status+"']").prop("checked",true);
  $("input:radio[value='"+status+"']").prop('checked',true);
   //var cityId = $("#cityId").val();

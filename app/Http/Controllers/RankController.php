@@ -8,6 +8,7 @@ use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use App\Models\Commission_categories; 
+use App\Models\Commision_type; 
 use Illuminate\Support\Facades\DB;
 
 class RankController extends Controller
@@ -101,4 +102,71 @@ class RankController extends Controller
        
     }
     
+    public function addCommissionType(){
+        //dd('addCommissionCategory');
+        $catData = DB::table('commission_categories')->get();
+        //$typeData = DB::table('commision_type')->get();
+        $typeData = Commision_type::all();
+       // dd($typeData->commisionTypes());
+       $typeData = DB::table('commision_type')->select('commision_type.id','commision_type.category_id','commision_type.type_name','commision_type.status','commission_categories.name as catName')
+        ->leftJoin('commission_categories', 'commision_type.category_id', '=', 'commission_categories.id')
+                        ->get($typeData);
+                        //dd($typeData);
+        $userData = \Auth::user();
+        return view('commision_type.list')->with(['user' => \Auth::user(),'catData'=>$catData,'typeData'=>$typeData]);
+    }
+
+    public function addType(Request $request){
+
+         //dd($request->update_Type_id);
+        // echo $request->update_Type_id;exit;
+ 
+         if(empty($request->update_Type_id)){
+            //dd('kdgfkdsghkjfsdkjfh');
+             $rules = [
+                 'type_name' => 'required'
+             ];
+         
+             $customMessages = [
+                 'required' => 'The :attribute field is required.'
+             ];
+     
+             //dd($request->all());
+             $catObj = new Commision_type;
+             $catObj->type_name = $request->type_name;
+             $catObj->category_id  = $request->category_id ;
+             $catObj->status = $request->status;
+             $catObj->save();
+     
+             return redirect()->route('addCommissionType')->with('successmessage','You have successfully added the Commission type.');
+         }else{
+           
+             $rules = [
+                 'type_name' => 'required'
+             ];
+         
+             $customMessages = [
+                 'required' => 'The :attribute field is required.'
+             ];
+     
+             $catArr = [
+                 "type_name" => $request->type_name,
+                 "category_id" => $request->category_id,
+                 "status" => $request->status,
+             ];
+             //dd($catArr);
+             $upId = $request->update_Type_id;
+             //dd($request->update_Type_id);
+             //$catUpData = DB::table('commision_type')->where('id', $upId)->first();
+             $catUpData = Commision_type::where('id', $upId)->first();
+             //dd($catUpData);
+             $catUpData->update($catArr);
+     
+             return redirect()->route('addCommissionType')->with('successmessage','You have successfully updated the commission type.');
+         }
+         
+        
+        
+     }
+
 }
