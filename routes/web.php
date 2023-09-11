@@ -35,6 +35,10 @@ Route::controller(ImportExportController::class)->group(function(){
 
 Auth::routes();
 
+Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
+    Route::get('/commission', [App\Http\Controllers\Admin\CommissionController::class, 'index'])->name('home');
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user-registration', [App\Http\Controllers\UserRegistrationController::class, 'registration'])->name('registration');
 Route::post('/get-sponser-details', [App\Http\Controllers\UserRegistrationController::class, 'getSponser'])->name('getSponser');
