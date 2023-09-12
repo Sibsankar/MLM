@@ -54,3 +54,6 @@ Route::post('/get-cities', [App\Http\Controllers\HomeController::class, 'getCiti
 Route::get('/rank', [App\Http\Controllers\RankController::class, 'index'])->name('rank');
 Route::get('/addCommissionCategory', [App\Http\Controllers\RankController::class, 'addCommissionCategory'])->name('addCommissionCategory');
 Route::post('/addCategory', [App\Http\Controllers\RankController::class, 'addCategory'])->name('addCategory');
+
+Route::get('/addCommissionType', [App\Http\Controllers\RankController::class, 'addCommissionType'])->name('addCommissionType');
+Route::post('/addType', [App\Http\Controllers\RankController::class, 'addType'])->name('addType');

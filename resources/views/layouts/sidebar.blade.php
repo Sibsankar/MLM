@@ -42,6 +42,11 @@
             <p>Commission Category</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ route('addCommissionType') }}" class="nav-link">
+            <p>Commission Type</p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

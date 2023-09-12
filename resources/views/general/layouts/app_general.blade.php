@@ -30,6 +30,7 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/summernote/summernote-bs4.min.css">
   <script src="{{ url('/')}}/assets/plugins/jquery/jquery.min.js"></script>
+  <link rel="stylesheet" href="{{ url('/')}}/assets/custom/app.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div id="app">
