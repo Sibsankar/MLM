@@ -37,16 +37,20 @@
             <p>My Associates</p>
           </a>
         </li>
+        @if(\Auth::user()->type == 'admin')
         <li class="nav-item">
           <a href="{{ route('addCommissionCategory') }}" class="nav-link">
             <p>Commission Category</p>
           </a>
         </li>
+        @endif
+        @if(\Auth::user()->type == 'admin')
         <li class="nav-item">
           <a href="{{ route('addCommissionType') }}" class="nav-link">
             <p>Commission Type</p>
           </a>
         </li>
+        @endif
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

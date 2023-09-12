@@ -36,7 +36,13 @@ Route::controller(ImportExportController::class)->group(function(){
 Auth::routes();
 
 Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
-    Route::get('/commission', [App\Http\Controllers\Admin\CommissionController::class, 'index'])->name('home');
+    Route::get('/commission', [App\Http\Controllers\Admin\CommissionController::class, 'index']);
+    Route::get('/rank', [App\Http\Controllers\RankController::class, 'index'])->name('rank');
+    Route::get('/addCommissionCategory', [App\Http\Controllers\RankController::class, 'addCommissionCategory'])->name('addCommissionCategory');
+    Route::post('/addCategory', [App\Http\Controllers\RankController::class, 'addCategory'])->name('addCategory');
+
+    Route::get('/addCommissionType', [App\Http\Controllers\RankController::class, 'addCommissionType'])->name('addCommissionType');
+    Route::post('/addType', [App\Http\Controllers\RankController::class, 'addType'])->name('addType');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -51,9 +57,3 @@ Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myasso
 Route::get('/view-profile/{id}', [App\Http\Controllers\HomeController::class, 'viewProfile'])->name('viewProfile');
 Route::post('/get-cities', [App\Http\Controllers\HomeController::class, 'getCities'])->name('getCities');
 
-Route::get('/rank', [App\Http\Controllers\RankController::class, 'index'])->name('rank');
-Route::get('/addCommissionCategory', [App\Http\Controllers\RankController::class, 'addCommissionCategory'])->name('addCommissionCategory');
-Route::post('/addCategory', [App\Http\Controllers\RankController::class, 'addCategory'])->name('addCategory');
-
-Route::get('/addCommissionType', [App\Http\Controllers\RankController::class, 'addCommissionType'])->name('addCommissionType');
-Route::post('/addType', [App\Http\Controllers\RankController::class, 'addType'])->name('addType');
