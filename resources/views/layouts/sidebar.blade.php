@@ -22,6 +22,7 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
+        @if(Auth::user()->pwd_status == 1)
         <li class="nav-item">
           <a href="{{ route('home') }}" class="nav-link">
             <p>Edit Profile</p>
@@ -50,6 +51,7 @@
             <p>Commission Type</p>
           </a>
         </li>
+        @endif
         @endif
       </ul>
     </nav>
