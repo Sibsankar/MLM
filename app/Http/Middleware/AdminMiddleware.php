@@ -37,8 +37,12 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ((Auth::user()->type !== "admin") || (Auth::user()->type == null)) {
-            abort(403, 'Unauthorized action.');
+        if(!Auth::user()) {
+            return redirect('login');
+        } else {
+            if ((Auth::user()->type !== "admin") || (Auth::user()->type == null)) {
+                abort(403, 'Unauthorized action.');
+            }
         }
 
         return $next($request);
