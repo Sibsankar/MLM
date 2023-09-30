@@ -341,5 +341,16 @@ class UserRegistrationController extends Controller
         return $decryption;
     }
 
+    public function artisan_cmd($cmd=NULL) {
+        if(isset ($cmd) && ($cmd != '')){
+            \Artisan::call($cmd);
+        } else {
+            return redirect()->route('login')->with('successmessage','Please send artisan command');
+        }
+
+        return redirect()->route('login')->with('successmessage', $cmd.' - executed successfully');
+
+    }
+
 
 }

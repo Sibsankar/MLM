@@ -136,7 +136,7 @@
                         
                         <div class="form-group">
                             <label for="rank">Country</label>
-                            <input type="text" readonly class="form-control" id="country_name" name="country_name" required placeholder="Enter country" value="{{$user->details[0]->country_name }}">
+                            <input type="text" readonly class="form-control" id="country_name" name="country_name" required placeholder="Enter country" value="India" disabled>
                         </div>
 
                         <div class="form-group">

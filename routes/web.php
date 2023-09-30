@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
+Route::get('/artisan/{cmd}', [App\Http\Controllers\UserRegistrationController::class, 'artisan_cmd'])->name('artisan_cmd');
+
 //Forgot password
 Route::get('/forgot-password', [App\Http\Controllers\UserRegistrationController::class, 'forgot_password'])->name('forgot_password');
 Route::post('/forgot-password/send-otp', [App\Http\Controllers\UserRegistrationController::class, 'send_otp'])->name('send_otp');
