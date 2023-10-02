@@ -18,6 +18,9 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
+Route::get('/artisan/{cmd}', [App\Http\Controllers\UserRegistrationController::class, 'artisan_cmd'])->name('artisan_cmd');
+Route::get('/sendsms', [App\Http\Controllers\UserRegistrationController::class, 'sendSMS'])->name('sendSMS');
+
 //Forgot password
 Route::get('/forgot-password', [App\Http\Controllers\UserRegistrationController::class, 'forgot_password'])->name('forgot_password');
 Route::post('/forgot-password/send-otp', [App\Http\Controllers\UserRegistrationController::class, 'send_otp'])->name('send_otp');
@@ -43,6 +46,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
 
     Route::get('/addCommissionType', [App\Http\Controllers\RankController::class, 'addCommissionType'])->name('addCommissionType');
     Route::post('/addType', [App\Http\Controllers\RankController::class, 'addType'])->name('addType');
+    Route::get('/get-types/{catid}', [App\Http\Controllers\Admin\RankConfigController::class, 'getCommTypeByCatId'])->name('get_types');
+    Route::get('/get-cats', [App\Http\Controllers\Admin\RankConfigController::class, 'getCommcats'])->name('get_cats');
+
+    Route::group(['prefix' => 'rank-config', 'middleware' => ['admin']], function() {
+        Route::get('/ranklist', [App\Http\Controllers\Admin\RankConfigController::class, 'rankList'])->name('rank_list');
+        Route::get('/add-config/{rankid}', [App\Http\Controllers\Admin\RankConfigController::class, 'addConfig'])->name('add_config');
+        Route::post('/add-rank-config', [App\Http\Controllers\Admin\RankConfigController::class, 'addRankConfig'])->name('add_rank_config');
+        
+    });
+    
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

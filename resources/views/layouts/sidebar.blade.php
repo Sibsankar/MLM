@@ -44,11 +44,16 @@
             <p>Commission Category</p>
           </a>
         </li>
-        @endif
-        @if(\Auth::user()->type == 'admin')
+
         <li class="nav-item">
           <a href="{{ route('addCommissionType') }}" class="nav-link">
             <p>Commission Type</p>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a href="{{ route('rank_list') }}" class="nav-link">
+            <p>Rank Config List</p>
           </a>
         </li>
         @endif
