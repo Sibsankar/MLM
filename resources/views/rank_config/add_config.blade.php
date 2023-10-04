@@ -21,7 +21,7 @@
     </div>
     @endforeach
   @endif
-  <form method="POST" action="{{ route('add_rank_config') }}" enctype='multipart/form-data'>
+  <form method="POST" action="{{ route('add_rank_config') }}" enctype='multipart/form-data' style="padding-left: 200px">
     <label class="bold">Rank - &nbsp;</label>{{ $rank->rank_name }}
     @csrf
     

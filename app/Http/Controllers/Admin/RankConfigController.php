@@ -39,7 +39,7 @@ class RankConfigController extends Controller
     }
 
     public function addRankConfig(Request $request) {
-        // dd($request->all());
+        dd($request->all());
         // need to check validation
         $rank = Ranks::find($request->rank_id);
         $comm_cats = Commission_categories::all();
