@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/jqvmap/jqvmap.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('/')}}/assets/dist/css/adminlte.min.css">
   <link rel="stylesheet" href="{{ url('/')}}/assets/plugins/select2/css/select2.min.css">
@@ -148,13 +152,24 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('/')}}/assets/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- DataTables  & Plugins -->
+<script src="{{ url('/')}}/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/jszip/jszip.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="{{ url('/')}}/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="{{ url('/')}}/assets/dist/js/pages/dashboard.js"></script>
 <script>
-
-
-        $('#reservationdate').datetimepicker({
-            format: 'L'
-        });
+    $('#reservationdate').datetimepicker({
+        format: 'L'
+    });
 
     $('#reservationdate').datetimepicker({
         format:'L',
@@ -162,7 +177,6 @@
         timepicker: false
 
     });
-    
 
     $('.select2').select2()
     $(function () {
@@ -171,12 +185,22 @@
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
-      theme: 'bootstrap4'
+        theme: 'bootstrap4'
+    })
     })
 
-    
+    $(function () {
+        $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        });
+    });
 
-  })
 
   
 </script>

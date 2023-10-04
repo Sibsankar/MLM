@@ -7,6 +7,7 @@ use Exception;
 use Twilio\Rest\Client;
 use App\Models\User; 
 use App\Models\User_detail; 
+use App\Models\Ranks; 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -114,13 +115,16 @@ class UserRegistrationController extends Controller
             return Redirect::back()->withErrors(['msg' => 'This email is already registered with us. Please login']);
         }
 
-        $first_nm = substr($request->associate_name, 0, 5);
-        $string = str_replace('/', '', $request->dob);
+        $first_nm = substr($request->associate_name, 0, 2);
+        $string = substr(str_replace('/', '', $request->dob), 0, 4);
         $tempPass=$first_nm.'@'.$string;
         $associateCode = "DVA".$first_nm.''.$string;
+        
+        $rank = Ranks::find($request->rank);
+        $rank = substr($rank->rank_name, 0, 25);
         //send sms
-        $message = "Welcome to DVA Mortnet Ltd. Your Associate Code is ".$associateCode. ". Login using your register mobile number and password ".$tempPass; 
-        // if ($this->smsService->sendSMS($request->phone_no, $message)) {
+        $message = "Welcome to DML. Your Assocode- ".$associateCode. " & Rank- ".$rank.", Login Id- ".$request->phone_no." and Password- ".$tempPass.", -DVA Martnet Ltd."; 
+        if ($this->smsService->sendSMS($request->phone_no, $message)) {
 
             $regiserUserId= User::create([
                 'name' => $request->associate_name,
@@ -149,7 +153,7 @@ class UserRegistrationController extends Controller
             $userDetails->save();
             
             return redirect()->route('registration')->with('successmessage','You are successfully registered.')->with('temppassword','Your auto generated password is - '.$tempPass.'. Please change your password after first login. Thank you');
-        // }
+        }
     }
 
     // public function sendSMS ($number, $message) {
@@ -349,6 +353,34 @@ class UserRegistrationController extends Controller
         }
 
         return redirect()->route('login')->with('successmessage', $cmd.' - executed successfully');
+
+    }
+
+    public function sendSMS() {
+        
+        $apiKey = urlencode('N2EzODQyNmY2ZTVhNTc2YTU0MzM0NjU0Njk0MTMyNTI=');
+	
+        // Message details
+        $numbers = urlencode('917001493650'); //Mobile number on which you want to send message
+        $sender = urlencode('DVAML'); 
+        $message = rawurlencode('Welcome to DML. Your Assocode- A001 & Rank- R001 , Login Id- L001  and Password- P001, -DVA Martnet Ltd.');
+
+        // $numbers = implode(',', $numbers);
+ 
+        // Prepare data for POST request
+        $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message, $test=1);
+
+        // Send the POST request with cURL
+        $ch = curl_init('https://api.textlocal.in/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Process your response here
+        echo $response;
+        
 
     }
 
