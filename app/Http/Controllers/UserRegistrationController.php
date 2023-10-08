@@ -121,7 +121,8 @@ class UserRegistrationController extends Controller
         $associateCode = "DVA".$first_nm.''.$string;
         
         $rank = Ranks::find($request->rank);
-        $rank = substr($rank->rank_name, 0, 25);
+        // $rank = substr($rank->rank_name, 0, 25);
+        $rank = $rank->short_code;
         //send sms
         $message = "Welcome to DML. Your Assocode- ".$associateCode. " & Rank- ".$rank.", Login Id- ".$request->phone_no." and Password- ".$tempPass.", -DVA Martnet Ltd."; 
         if ($this->smsService->sendSMS($request->phone_no, $message)) {
@@ -230,6 +231,8 @@ class UserRegistrationController extends Controller
         if(!empty($user)){
             $reset_otp = random_int(100000, 999999);
             $message = "Your reset password OTP is ".$reset_otp. "."; 
+            $message = "Hi ".$user->name.". Your OTP is ".$reset_otp." to change password in case of forget password in DVA Marnet portal. Don't share this OTP to anyone. -DVA Marnet Ltd"; 
+            // echo $message;
             // if ($this->smsService->sendSMS($request->phone_no, $message)) {
                 $user->update(['remember_token' => $reset_otp]);
                 $encPhone = $this->encryptStr($request->phone_no);

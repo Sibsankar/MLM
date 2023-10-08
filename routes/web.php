@@ -51,7 +51,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
 
     Route::group(['prefix' => 'rank-config', 'middleware' => ['admin']], function() {
         Route::get('/ranklist', [App\Http\Controllers\Admin\RankConfigController::class, 'rankList'])->name('rank_list');
-        Route::get('/add-config/{rankid}', [App\Http\Controllers\Admin\RankConfigController::class, 'addConfig'])->name('add_config');
+        Route::get('/add-config/{rankid}/{phaseid}', [App\Http\Controllers\Admin\RankConfigController::class, 'addConfig'])->name('add_config');
         Route::post('/add-rank-config', [App\Http\Controllers\Admin\RankConfigController::class, 'addRankConfig'])->name('add_rank_config');
         
     });

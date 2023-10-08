@@ -8,13 +8,15 @@ use App\Models\Ranks;
 use App\Models\Commission_categories;
 use App\Models\Commision_type;
 use App\Models\Rankconfig;
+use App\Models\Phase;
 
 class RankConfigController extends Controller
 {
     public function rankList() {
         $ranks = Ranks::all();
+        $phases = Phase::all();
 
-        return view('rank_config/rank_list')->with(['ranks' => $ranks]);
+        return view('rank_config/rank_list')->with(['ranks' => $ranks, 'phases' => $phases]);
     }
 
     public function getCommcats() {
@@ -29,12 +31,13 @@ class RankConfigController extends Controller
         }
     }
 
-    public function addConfig($rank_id = NULL) {
+    public function addConfig($rank_id = NULL, $phase_id = NULL) {
         $rank = Ranks::find($rank_id);
+        $phase = Phase::find($phase_id);
         $comm_cats = Commission_categories::all();
         $comm_types = Commision_type::all();
 
-        return view('rank_config/add_config')->with(['rank' => $rank, 'categories' => $comm_cats, 'types' => $comm_types]);
+        return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types]);
 
     }
 
@@ -42,8 +45,11 @@ class RankConfigController extends Controller
         dd($request->all());
         // need to check validation
         $rank = Ranks::find($request->rank_id);
+        $phase = Phase::find($request->phase_id);
         $comm_cats = Commission_categories::all();
         $comm_types = Commision_type::all();
+
+        $hasData = Rankconfig::where('rank_id', $request->rank_id)->where('performance_target', '<>', '')->first();
 
         $hasPerformance_target = Rankconfig::where('rank_id', $request->rank_id)->where('performance_target', '<>', '')->first();
         if ($hasPerformance_target) {
@@ -103,6 +109,6 @@ class RankConfigController extends Controller
             }
         }
 
-        return view('rank_config/add_config')->with(['rank' => $rank, 'categories' => $comm_cats, 'types' => $comm_types, 'successmessage' => 'Updated successfully.']);
+        return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types, 'successmessage' => 'Updated successfully.']);
     }
 }

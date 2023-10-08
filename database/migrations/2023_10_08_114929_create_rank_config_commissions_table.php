@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rankconfigs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('rank_config_commissions', function (Blueprint $table) {
             $table->bigInteger('rank_id')->unsigned()->index()->nullable();
-            $table->string('performance_target')->nullable();
-            $table->string('guaranteed_prize')->nullable();
-            $table->string('conveyance')->nullable();
-            $table->string('multiple_by')->nullable();
+            $table->bigInteger('phase_id')->unsigned()->index()->nullable();
+            $table->string('commission_cat')->nullable();
+            $table->string('commission_type')->nullable();
+            $table->string('percentage')->nullable();
             $table->string('amount')->nullable();
             $table->timestamps();
             $table->foreign('rank_id')->references('id')->on('ranks')->onDelete('cascade');
+            $table->foreign('phase_id')->references('id')->on('phases')->onDelete('cascade');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rankconfigs');
+        Schema::dropIfExists('rank_config_commissions');
     }
 };
