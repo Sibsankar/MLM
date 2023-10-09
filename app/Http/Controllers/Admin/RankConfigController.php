@@ -9,6 +9,7 @@ use App\Models\Commission_categories;
 use App\Models\Commision_type;
 use App\Models\Rankconfig;
 use App\Models\Phase;
+use App\Models\RankConfigCommission;
 
 class RankConfigController extends Controller
 {
@@ -37,78 +38,60 @@ class RankConfigController extends Controller
         $comm_cats = Commission_categories::all();
         $comm_types = Commision_type::all();
 
-        return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types]);
+        $hasData = Rankconfig::with('commissions')->where(['rank_id' => $rank_id, 'phase_id' => $phase_id])->first();
+        // dd($hasData);
+
+        return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types, 'data' => $hasData]);
 
     }
 
     public function addRankConfig(Request $request) {
-        dd($request->all());
+        // dd($request->all());
         // need to check validation
         $rank = Ranks::find($request->rank_id);
         $phase = Phase::find($request->phase_id);
         $comm_cats = Commission_categories::all();
         $comm_types = Commision_type::all();
 
-        $hasData = Rankconfig::where('rank_id', $request->rank_id)->where('performance_target', '<>', '')->first();
+        $hasData = Rankconfig::where(['rank_id' => $request->rank_id, 'phase_id' => $request->phase_id])->first();
 
-        $hasPerformance_target = Rankconfig::where('rank_id', $request->rank_id)->where('performance_target', '<>', '')->first();
-        if ($hasPerformance_target) {
-            $hasPerformance_target->update([
+        if ($hasData) {
+            $hasData->update([
                 'performance_target' => $request->performance_target,
-                'multiple_by' => $request->multiple_by
-            ]);
-        } else {
-            Rankconfig::create([
-                'rank_id' => $request->rank_id,
-                'performance_target' => $request->performance_target,
-                'multiple_by' => $request->multiple_by
-            ]);
-        }
-
-        $hasGuaranteed_prize = Rankconfig::where('rank_id', $request->rank_id)->where('guaranteed_prize', '<>', '')->first();
-        if ($hasGuaranteed_prize) {
-            $hasGuaranteed_prize->update([
-                'guaranteed_prize' => $request->guaranteed_prize
-            ]);
-        } else {
-            Rankconfig::create([
-                'rank_id' => $request->rank_id,
-                'guaranteed_prize' => $request->guaranteed_prize
-            ]);
-        }
-
-        $hasConveyance = Rankconfig::where('rank_id', $request->rank_id)->where('conveyance', '<>', '')->first();
-        if ($hasConveyance) {
-            $hasConveyance->update([
+                'multiple_by' => $request->multiple_by,
+                'guaranteed_prize' => $request->guaranteed_prize,
                 'conveyance' => $request->conveyance
             ]);
+
         } else {
             Rankconfig::create([
                 'rank_id' => $request->rank_id,
-                'conveyance' => $request->conveyance
+                'phase_id' => $request->phase_id,
+                'performance_target' => $request->performance_target,
+                'multiple_by' => $request->multiple_by,
+                'guaranteed_prize' => $request->guaranteed_prize,
+                'conveyance' => $request->conveyance,
+                'amount' => 0 //*************************************** need to calculate ********************************************************
             ]);
         }
 
         if (!empty($request->category_id) && !empty($request->type_id) && !empty($request->percentage)) {
+            RankConfigCommission::where(['rank_id' => $request->rank_id, 'phase_id' => $request->phase_id])->delete();
             foreach ($request->category_id as $key => $cat_id) {
                 $type_id = $request->type_id[$key];
-                $percentage = ($request->percentage[$key]) ? $request->percentage[$key] : 0;
-                $hasCommConfig = Rankconfig::where(['commission_cat' => $request->commission_cat, 'commission_type' => $request->commission_type])->first();
-                if ($hasCommConfig) {
-                    $hasCommConfig->update([
-                        'percentage' => $request->percentage[$key]
-                    ]);
-                } else {
-                    Rankconfig::create([
-                        'commission_cat' => $cat_id,
-                        'commission_type' => $request->type_id[$key],
-                        'percentage' => $request->percentage[$key]
-                    ]);
-                }
+                RankConfigCommission::create([
+                    'rank_id' => $request->rank_id,
+                    'phase_id' => $request->phase_id,
+                    'commission_cat' => $cat_id,
+                    'commission_type' => $request->type_id[$key],
+                    'percentage' => ($request->percentage[$key]) ? $request->percentage[$key] : 0,
+                    'amount' => 0 //*************************************** need to calculate ********************************************************
+                ]);
                 
             }
         }
 
-        return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types, 'successmessage' => 'Updated successfully.']);
+        return redirect()->back()->with('successmessage', 'Updated successfully.');   
+        // return view('rank_config/add_config')->with(['rank' => $rank, 'phase' => $phase, 'categories' => $comm_cats, 'types' => $comm_types, 'data' => $hasData, 'successmessage' => 'Updated successfully.']);
     }
 }

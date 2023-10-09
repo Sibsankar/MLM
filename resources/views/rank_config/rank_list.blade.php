@@ -33,7 +33,7 @@
                   <tr>
                     <td>{{$key+1}}</td>
                     <td>{{ $rank->rank_name}}</td>
-                    <td><a href="javascript:void(0);" onclick=navigate({{$rank->id}}); class="btn btn-primary btn-sm">Add Config</a></td>
+                    <td><a href="javascript:void(0);" onclick=navigate({{$rank->id}}); class="btn btn-primary btn-sm">View Config</a></td>
                   </tr>
                   @endforeach
                 </tbody>

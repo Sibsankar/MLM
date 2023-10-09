@@ -22,30 +22,30 @@
     @endforeach
   @endif
   <form method="POST" action="{{ route('add_rank_config') }}" enctype='multipart/form-data' style="padding-left: 200px">
-    <label class="bold">Rank - &nbsp;</label>{{ $rank->rank_name }}
+    <label class="h5">Rank - &nbsp;</label>{{ $rank->rank_name }} &nbsp; &nbsp; <label class="h5">Phase - &nbsp;</label>{{ $phase->name.' ('.date('jS F', strtotime($phase->start_date)).' - '.date('jS F', strtotime($phase->end_date)).')' }}
     @csrf
-    
+    <hr>
     <div class="row border mt-2 p-2">
       <div class="col-6">
         <label>Performance Target</label>
-        <input type="text" class="form-control" value="" name="performance_target" placeholder="Enter config value">
+        <input type="text" class="form-control" name="performance_target" placeholder="Enter config value" value="{{(!empty($data->performance_target)) ? $data->performance_target : ''}}">
       </div>
 
       <div class="col-6">
         <label>Multiple By</label>
-        <input type="text" class="form-control" value="" name="multiple_by" placeholder="Enter config value">
+        <input type="text" class="form-control" name="multiple_by" placeholder="Enter config value" value="{{(!empty($data->multiple_by)) ? $data->multiple_by : ''}}">
       </div>
     </div>
 
     <div class="row border mt-2 p-2">
       <div class="col-6">
         <label>Guaranteed Prize</label>
-        <input type="text" class="form-control" value="" name="guaranteed_prize" placeholder="Enter config value">
+        <input type="text" class="form-control" name="guaranteed_prize" placeholder="Enter config value" value="{{(!empty($data->guaranteed_prize)) ? $data->guaranteed_prize : ''}}">
       </div>
 
       <div class="col-6">
         <label>Conveyance</label>
-        <input type="text" class="form-control" value="" name="conveyance" placeholder="Enter config value">
+        <input type="text" class="form-control" name="conveyance" placeholder="Enter config value" value="{{(!empty($data->conveyance)) ? $data->conveyance : ''}}">
       </div>
     </div>
     <div class="text-right">
@@ -53,7 +53,41 @@
     </div>
     <div class="form-body">
       <div class="mt-2 comm-sec" id="comm_sec">
-        <div class="row border p-2 comm-subsec" id="comm_subsec_1">
+        <!-- start -->
+        @if(!empty($data->commissions))
+        @foreach($data->commissions as $key => $e_commission)
+        <div class="row border mt-2 p-2 comm-subsec" id="comm_subsec_{{$key+1}}">
+          <div class="col-6">
+            <label>Select Commission Category</label>
+            <select class="form-control" name="category_id[]" id="comm_cat_{{$key+1}}" onchange="getCommTypes({{$key+1}},this)">
+              <option value="0">Select</option>
+              @foreach($categories as $cat)
+              <option value="{{ $cat->id }}" @if(($e_commission->commission_cat) && ($cat->id == $e_commission->commission_cat)) selected @endif>{{ $cat->name }} </option>
+              @endforeach
+            </select>
+          </div>
+
+          @if($e_commission->commission_type)
+          <div class="col-5">
+            <label>Select Commission Type</label>
+            <select class="form-control" name="type_id[]" id="comm_type_{{$key+1}}">
+              <!-- option will populate here from get types call -->
+              @foreach($types as $type)
+              @if($type->category_id == $e_commission->commission_cat)
+              <option value="{{ $type->id }}" @if(($e_commission->commission_type) && ($type->id == $e_commission->commission_type)) selected @endif>{{ $type->type_name }}</option>
+              @endif
+              @endforeach
+            </select>
+            <input type="text" class="form-control mt-2" name="percentage[]" placeholder="Enter config value" value="{{(!empty($e_commission->percentage)) ? $e_commission->percentage : ''}}">
+          </div>
+          @endif
+          <!-- <div class="col-1">
+            <button type="button" onclick="removeCommsubsec(1)" class="btn btn-danger mt-5 del-commsec"><i class="fa fa-minus"></i></button>
+          </div> -->
+        </div>
+        @endforeach
+        @else
+        <div class="row border mt-2 p-2 comm-subsec" id="comm_subsec_1">
           <div class="col-6">
             <label>Select Commission Category</label>
             <select class="form-control" name="category_id[]" id="comm_cat_1" onchange="getCommTypes(1,this)">
@@ -69,19 +103,17 @@
             <select class="form-control" name="type_id[]" id="comm_type_1">
               <!-- option will populate here from get types call -->
             </select>
-            <input type="text" class="form-control mt-2" value="" name="percentage[]" placeholder="Enter config value">
+            <input type="text" class="form-control mt-2" name="percentage[]" placeholder="Enter config value" value="{{(!empty($e_commission->percentage)) ? $e_commission->percentage : ''}}">
           </div>
-
-          <!-- <div class="col-1">
-            <button type="button" onclick="removeCommsubsec(1)" class="btn btn-danger mt-5 del-commsec"><i class="fa fa-minus"></i></button>
-          </div> -->
         </div>
-
+        @endif
+        <!-- end -->
       </div>
 
 
 
       <input type="hidden" name="rank_id" value="{{$rank->id}}">
+      <input type="hidden" name="phase_id" value="{{$phase->id}}">
       <!-- /.card-body -->
     </div>
     <div class="card-footer mt-2">
@@ -111,8 +143,10 @@
   }
 
   $('.add-commsec').on('click', function() { 
-    let counter = $('#comm_sec .comm-subsec').length;
-    counter = parseInt(counter)+1;
+    let last_counter = $('.comm-subsec:last').attr('id');
+    last_counter = last_counter.split('_');
+    last_counter = last_counter[2];
+    let counter = parseInt(last_counter)+1;
     console.log('click', counter);
 
     let url = "{{ route('get_cats') }}";
