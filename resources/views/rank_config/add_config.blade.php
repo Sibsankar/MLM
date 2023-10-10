@@ -55,11 +55,12 @@
       <div class="mt-2 comm-sec" id="comm_sec">
         <!-- start -->
         @if(!empty($data->commissions))
+        @php $lcount = count($data->commissions);  @endphp
         @foreach($data->commissions as $key => $e_commission)
-        <div class="row border mt-2 p-2 comm-subsec" id="comm_subsec_{{$key+1}}">
+        <div class="row border mt-2 p-2 comm-subsec" id="comm_subsec_{{$lcount}}">
           <div class="col-6">
             <label>Select Commission Category</label>
-            <select class="form-control" name="category_id[]" id="comm_cat_{{$key+1}}" onchange="getCommTypes({{$key+1}},this)">
+            <select class="form-control" name="category_id[]" id="comm_cat_{{$lcount}}" onchange="getCommTypes({{$lcount}},this)">
               <option value="0">Select</option>
               @foreach($categories as $cat)
               <option value="{{ $cat->id }}" @if(($e_commission->commission_cat) && ($cat->id == $e_commission->commission_cat)) selected @endif>{{ $cat->name }} </option>
@@ -70,7 +71,7 @@
           @if($e_commission->commission_type)
           <div class="col-5">
             <label>Select Commission Type</label>
-            <select class="form-control" name="type_id[]" id="comm_type_{{$key+1}}">
+            <select class="form-control" name="type_id[]" id="comm_type_{{$lcount}}">
               <!-- option will populate here from get types call -->
               @foreach($types as $type)
               @if($type->category_id == $e_commission->commission_cat)
@@ -85,6 +86,7 @@
             <button type="button" onclick="removeCommsubsec(1)" class="btn btn-danger mt-5 del-commsec"><i class="fa fa-minus"></i></button>
           </div> -->
         </div>
+        @php $lcount--; @endphp
         @endforeach
         @else
         <div class="row border mt-2 p-2 comm-subsec" id="comm_subsec_1">
@@ -117,12 +119,16 @@
       <!-- /.card-body -->
     </div>
     <div class="card-footer mt-2">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" onclick=validateForm() class="btn btn-primary">Submit</button>
     </div>
   </form>
 
 </div>
 <script>
+  function validateForm() {
+
+  }
+
   function getCommTypes(i, el){
     let catid = el.value;
     let url = "{{ route('get_types', ":catid") }}";
@@ -143,7 +149,7 @@
   }
 
   $('.add-commsec').on('click', function() { 
-    let last_counter = $('.comm-subsec:last').attr('id');
+    let last_counter = $('.comm-subsec:first').attr('id');
     last_counter = last_counter.split('_');
     last_counter = last_counter[2];
     let counter = parseInt(last_counter)+1;
@@ -178,7 +184,7 @@
           '<button type="button" onclick="removeCommsubsec('+counter+')" class="btn btn-danger mt-5 del-commsec"><i class="fa fa-minus"></i></button>'+
         '</div>'+
       '</div>';
-      $("#comm_sec").last().append(commHtml);
+      $("#comm_sec").first().prepend(commHtml);
     });
     
   });

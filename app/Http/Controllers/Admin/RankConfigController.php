@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Redirect;
 use App\Models\Ranks;
 use App\Models\Commission_categories;
 use App\Models\Commision_type;
@@ -48,6 +49,29 @@ class RankConfigController extends Controller
     public function addRankConfig(Request $request) {
         // dd($request->all());
         // need to check validation
+        $rules = [
+            'rank_id' => 'required',
+            'phase_id' => 'required',
+            'performance_target' => 'required',
+            'guaranteed_prize' => 'required',
+            'conveyance' => 'required',
+            'commission_cat.*' => 'required',
+            'commission_type.*' => 'required',
+            'percentage.*' => 'required'
+        ];
+    
+        $customMessages = [
+            'required' => 'The :attribute field is required.'
+        ];
+
+        $validator = \Validator::make( $request->all(), $rules, $customMessages );
+
+        if ( $validator->fails() ) {
+            return Redirect::back()->withErrors($validator->errors());
+        }
+
+
+
         $rank = Ranks::find($request->rank_id);
         $phase = Phase::find($request->phase_id);
         $comm_cats = Commission_categories::all();
@@ -58,9 +82,10 @@ class RankConfigController extends Controller
         if ($hasData) {
             $hasData->update([
                 'performance_target' => $request->performance_target,
-                'multiple_by' => $request->multiple_by,
+                'multiple_by' => ($request->multiple_by) ? $request->multiple_by : 1,
                 'guaranteed_prize' => $request->guaranteed_prize,
-                'conveyance' => $request->conveyance
+                'conveyance' => $request->conveyance,
+                'amount' => ($request->multiple_by && $request->performance_target) ? ($request->performance_target * $request->multiple_by) : ($request->performance_target * 1)
             ]);
 
         } else {
@@ -68,10 +93,10 @@ class RankConfigController extends Controller
                 'rank_id' => $request->rank_id,
                 'phase_id' => $request->phase_id,
                 'performance_target' => $request->performance_target,
-                'multiple_by' => $request->multiple_by,
+                'multiple_by' => ($request->multiple_by) ? $request->multiple_by : 1,
                 'guaranteed_prize' => $request->guaranteed_prize,
                 'conveyance' => $request->conveyance,
-                'amount' => 0 //*************************************** need to calculate ********************************************************
+                'amount' => ($request->multiple_by && $request->performance_target) ? ($request->performance_target * $request->multiple_by) : ($request->performance_target * 1) //*************************************** need to calculate ********************************************************
             ]);
         }
 

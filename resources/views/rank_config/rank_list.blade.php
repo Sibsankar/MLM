@@ -14,7 +14,7 @@
                 <div class=col-10">
                   <select class="form-control" id="phase" onchange=ch_phase();>
                     @foreach($phases as $phase)
-                      <option value={{$phase->id}}>{{$phase->name}}</option>
+                      <option value={{$phase->id}}>{{ $phase->name.' ('.date('jS F', strtotime($phase->start_date)).' - '.date('jS F', strtotime($phase->end_date)).')' }}</option>
                     @endforeach
                   </select>
                   <p class="text-danger" id="ph_err"></p>
