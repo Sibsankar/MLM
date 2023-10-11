@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use App\Models\User_detail; 
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class HomeController extends Controller
 {
@@ -121,6 +122,29 @@ public function viewProfile($id){
 }
 
 
+    public function generatePdf() {
+        $StateData= DB::table('all_states')->get();
+        $cityData= DB::table('all_cities')->get();
+        //dd($StateData);
+        $getRanks = [];       
+        $userData = \Auth::user();
+        $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
+        ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
+                        ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
+                        ->get();
+    
+        $getRanks = DB::table('ranks')
+                                    ->where('rank_seq', '=', $userData->details[0]->rank)
+                                    ->first();
+
+        $pdf=PDF::loadView('home', ['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks,'StateData'=>$StateData,'cityData'=>$cityData ]);
+        $pdf->setOptions(['isPhpEnabled', true]);
+        $pdf->setPaper('L', 'landscape');
+        return $pdf->stream('test_pdf.pdf'); 
+         
+       
+
+}
 
     public function updateProfile(Request $request) {
         // dd($request->all());

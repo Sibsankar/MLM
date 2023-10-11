@@ -6,6 +6,7 @@
         <div class="col-md-12" style="padding-left: 200px">
             <div class="card">
                 <div class="card-header">{{ __('Edit Profile') }}</div>
+                <a href="{{ route('generate-pdf') }}">Generate Pdf</a>
 
                 <div class="card-body" style="max-height:75vh; overflow-y:scroll;">
                     @if (session('status'))
@@ -246,6 +247,29 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                         </form>
+                        <br><br><br>
+                        <h1>Change Password</h1>
+                        <form method="POST" action="{{ route('updatePwd') }}" enctype='multipart/form-data'>
+                            @csrf
+                            <div class="card-body">
+    
+                                <div style="border: 1px solid rgb(5 124 117); padding:15px">
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInputEmail1">Password</label>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter New Password">     
+                                        </div> 
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleInputEmail1">Confirm Password</label>
+                                            <input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Enter Confirm Password">     
+                                        </div>
+                                        <input type="hidden" name="user_id" value={{$user->id}}>
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-xs btn-success mt-4">Update Password</button> 
+                                        </div>
+                                    </div>
+                                </div>  
+                            </form> 
                     @else
                     <p class="h4">Change Password</p>
                         <!-- form start -->

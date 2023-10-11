@@ -2,8 +2,13 @@
 
 @section('content')
 <div class="container">
-  
-  <h3>Add Config</h3>
+  <div class="row" style="padding-left: 170px;">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Add Config</h3>
+        </div>
+
   @if (session('status'))
     <div class="alert alert-success" role="alert">
         {{ session('status') }}
@@ -21,7 +26,8 @@
     </div>
     @endforeach
   @endif
-  <form method="POST" action="{{ route('add_rank_config') }}" enctype='multipart/form-data' style="padding-left: 200px">
+ 
+  <form method="POST" action="{{ route('add_rank_config') }}" enctype='multipart/form-data' >
     <label class="h5">Rank - &nbsp;</label>{{ $rank->rank_name }} &nbsp; &nbsp; <label class="h5">Phase - &nbsp;</label>{{ $phase->name.' ('.date('jS F', strtotime($phase->start_date)).' - '.date('jS F', strtotime($phase->end_date)).')' }}
     @csrf
     <hr>
@@ -123,6 +129,8 @@
     </div>
   </form>
 
+</div>
+</div>
 </div>
 <script>
   function validateForm() {

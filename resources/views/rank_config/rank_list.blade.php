@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
+    <div class="row" style="padding-left: 200px;">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
@@ -11,7 +11,8 @@
             <!-- /.card-header -->
             <div class="card-body">
               <div class="row">
-                <div class=col-10">
+                <div class="col-10">
+                  <h5>Select Phase</h5>
                   <select class="form-control" id="phase" onchange=ch_phase();>
                     @foreach($phases as $phase)
                       <option value={{$phase->id}}>{{ $phase->name.' ('.date('jS F', strtotime($phase->start_date)).' - '.date('jS F', strtotime($phase->end_date)).')' }}</option>
