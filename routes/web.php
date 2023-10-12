@@ -24,7 +24,8 @@ Route::get('/sendsms', [App\Http\Controllers\UserRegistrationController::class, 
 //Forgot password
 Route::get('/forgot-password', [App\Http\Controllers\UserRegistrationController::class, 'forgot_password'])->name('forgot_password');
 Route::post('/forgot-password/send-otp', [App\Http\Controllers\UserRegistrationController::class, 'send_otp'])->name('send_otp');
-Route::any('/forgot-password/verify-otp/{token?}', [App\Http\Controllers\UserRegistrationController::class, 'verify_otp'])->name('verify_otp');
+Route::post('/forgot-password/resend-otp', [App\Http\Controllers\UserRegistrationController::class, 'resend_otp'])->name('resend_otp');
+Route::any('/forgot-password/verify-otp', [App\Http\Controllers\UserRegistrationController::class, 'verify_otp'])->name('verify_otp');
 Route::get('/reset-password/{token}', [App\Http\Controllers\UserRegistrationController::class, 'reset_pwd'])->name('reset_pwd');
 Route::post('/update-password', [App\Http\Controllers\UserRegistrationController::class, 'update_pwd'])->name('update_pwd');
 

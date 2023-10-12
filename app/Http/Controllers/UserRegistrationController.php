@@ -230,20 +230,46 @@ class UserRegistrationController extends Controller
         $user = User::where('phone_no', $request->phone_no)->first();
         if(!empty($user)){
             $reset_otp = random_int(100000, 999999);
-            $message = "Your reset password OTP is ".$reset_otp. "."; 
-            $message = "Hi ".$user->name.". Your OTP is ".$reset_otp." to change password in case of forget password in DVA Marnet portal. Don't share this OTP to anyone. -DVA Marnet Ltd"; 
+            $user_name = explode(" ", $user->name); 
+            $message = "Hi ".$user_name[0].",\nYour OTP is ".$reset_otp." to change password in case of forget password in DVA Martnet portal. Don't share this OTP to anyone. -DVA Martnet Ltd."; 
             // echo $message;
             // if ($this->smsService->sendSMS($request->phone_no, $message)) {
                 $user->update(['remember_token' => $reset_otp]);
                 $encPhone = $this->encryptStr($request->phone_no);
-                return redirect()->route('verify_otp', ['token' => $encPhone])->with('successmessage','OTP sent successfully - '.$reset_otp);
+                return redirect()->route('verify_otp', ['token' => $encPhone])->with('successmessage','OTP sent successfully.');
             // }
         } else {
             return \Redirect::back()->withErrors(['Phone number not registered.']);
         }
     }
 
-    public function verify_otp(Request $request, $token=NULL) {
+    public function resend_otp(Request $request) {
+        // dd($request->all());
+        $decPhone = $this->decryptStr($request->token);
+        $user = User::where(['phone_no' => $decPhone])->first();
+        if(!empty($user)){
+            $reset_otp = random_int(100000, 999999);
+            $user_name = explode(" ", $user->name); 
+            $message = "Hi ".$user_name[0].",\nYour OTP is ".$reset_otp." to change password in case of forget password in DVA Martnet portal. Don't share this OTP to anyone. -DVA Martnet Ltd."; 
+            // echo $message;
+            // if ($this->smsService->sendSMS($decPhone, $message)) {
+                $user->update(['remember_token' => $reset_otp]);
+                $response = array(
+                    'status' => 'success',
+                    'msg' => 'OTP sent successfully.'
+                );
+                return response()->json($response); 
+            // }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'msg' => 'Something went wrong',
+            );
+            return response()->json($response); 
+        }
+    }
+
+    public function verify_otp(Request $request) {
         if ($request->isMethod('post')) {
             // dd($request->all());
             $decPhone = $this->decryptStr($request->token);
