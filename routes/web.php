@@ -65,6 +65,7 @@ Route::post('/get-sponser-details', [App\Http\Controllers\UserRegistrationContro
 Route::post('/get-rank-details', [App\Http\Controllers\UserRegistrationController::class, 'getRankbySp'])->name('getRankbySp');
 
 Route::post('/add-user', [App\Http\Controllers\UserRegistrationController::class, 'addUser'])->name('addUser');
+Route::post('/resend-reg-otp', [App\Http\Controllers\UserRegistrationController::class, 'resend_reg_otp'])->name('resend_reg_otp');
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/change-pwd', [App\Http\Controllers\HomeController::class, 'changePwd'])->name('updatePwd');
 Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myassociate'])->name('my-associate');
