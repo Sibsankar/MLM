@@ -38,7 +38,7 @@ class HomeController extends Controller
         $userData = \Auth::user();
         $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
         ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
-                        ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
+                        ->where('user_details.sponsor_code', '=', $userData->details[0]->referred_by)
                         ->get();
     
         $getRanks = DB::table('ranks')
