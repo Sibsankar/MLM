@@ -140,6 +140,8 @@ public function viewProfile($id){
         $pdf=PDF::loadView('home', ['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks,'StateData'=>$StateData,'cityData'=>$cityData ]);
         $pdf->setOptions(['isPhpEnabled', true]);
         $pdf->setPaper('L', 'landscape');
+        $userData->update(['is_edit' => '1']);
+        dd($userData);
         return $pdf->stream('test_pdf.pdf'); 
          
        

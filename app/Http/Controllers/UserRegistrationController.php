@@ -118,7 +118,7 @@ class UserRegistrationController extends Controller
         $first_nm = substr($request->associate_name, 0, 2);
         $string = substr(str_replace('/', '', strtotime($request->dob)), 0, 4);
         $tempPass=$first_nm.'@'.$string;
-        $associateCode = "DVA".$first_nm.''.$string;
+        $associateCode = $this->getAssociateCode();
         
         $rank = Ranks::find($request->rank);
         // $rank = substr($rank->rank_name, 0, 25);
@@ -165,8 +165,8 @@ class UserRegistrationController extends Controller
             $first_nm = substr($user->name, 0, 2);
             $string = substr(str_replace('/', '', strtotime($user->Userdetails->dob)), 0, 4);
             $tempPass=$first_nm.'@'.$string;
-            $associateCode = "DVA".$first_nm.''.$string;
-            
+            $associateCode = $this->getAssociateCode();
+    
             $rank = Ranks::find($user->Userdetails->rank);
             // $rank = substr($rank->rank_name, 0, 25);
             $rank = $rank->short_code;
@@ -187,6 +187,17 @@ class UserRegistrationController extends Controller
                 'msg' => 'Something went wrong',
             );
             return response()->json($response); 
+        }
+    }
+
+    public function getAssociateCode(){
+        $user = User_detail::latest('user_id')->first();
+        $code = substr($user->sponsor_code, 4);
+        if($code < 1000263){
+            return 'DMPL1000263';
+        } else {
+            $code = $code + 1;
+            return 'DMPL'.$code;
         }
     }
 

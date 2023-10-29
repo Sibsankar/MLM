@@ -6,7 +6,7 @@
         <div class="col-md-12" style="padding-left: 200px">
             <div class="card">
                 <div class="card-header">{{ __('Edit Profile') }}</div>
-                <a href="{{ route('generate-pdf') }}">Generate Pdf</a>
+                <a target="_blank" onclick="return confirm('You will not able to edit profile after that. Are you sure?')" href="{{ route('generate-pdf') }}">Generate Pdf</a>
 
                 <div class="card-body" style="max-height:75vh; overflow-y:scroll;">
                     @if (session('status'))
@@ -244,7 +244,7 @@
                         <!-- /.card-body -->
 
                         <div class="card-footer mt-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        @if($user->is_edit == 0)<button type="submit" class="btn btn-primary">Submit</button>@endif
                         </div>
                         </form>
                         <br><br><br>
