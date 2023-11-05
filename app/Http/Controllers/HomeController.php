@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use App\Models\User_detail; 
 use Illuminate\Support\Facades\DB;
-use PDF;
+//use PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+
 
 class HomeController extends Controller
 {
@@ -137,9 +139,17 @@ public function viewProfile($id){
                                     ->where('rank_seq', '=', $userData->details[0]->rank)
                                     ->first();
 
-        $pdf=PDF::loadView('home', ['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'rankData'=>$getRanks,'StateData'=>$StateData,'cityData'=>$cityData ]);
+        $getState = DB::table('all_states')->select('state_name')
+                                    ->where('state_code', '=', $userData->details[0]->state_name)
+                                    ->first();  
+         $getCity = DB::table('all_cities')->select('city_name')
+                                    ->where('city_code', '=', $userData->details[0]->city_name)
+                                    ->first();                        
+
+        $pdf=PDF::loadView('pdf_profile', ['user' => \Auth::user(),'sponsorDetails' =>$getSponsorDetails,'getState'=>$getState, 'getCity'=>$getCity, 'rankData'=>$getRanks,'StateData'=>$StateData,'cityData'=>$cityData ]);
         $pdf->setOptions(['isPhpEnabled', true]);
         $pdf->setPaper('L', 'landscape');
+        
         return $pdf->stream('test_pdf.pdf'); 
          
        

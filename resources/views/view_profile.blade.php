@@ -29,9 +29,15 @@
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
+                  <?php if(!empty($associate->image)){?>
                   <img style="height: 100px; width:100px;" class="profile-user-img img-fluid img-circle"
                        src="{{ url('/')}}/images/{{ $associate->image }}"
+                       alt="User profile picture"><?php }else{?>
+                        
+                        <img style="height: 100px; width:100px;" class="profile-user-img img-fluid img-circle"
+                       src="{{ url('/')}}/images/no-image.png"
                        alt="User profile picture">
+                        <?php }?>
                 </div>
 
                 <h3 class="profile-username text-center">{{ $associate->associate_name }}</h3>
@@ -40,10 +46,10 @@
 
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>My Associates</b> <a class="float-right">20</a>
+                    <b>My Associates</b> <a class="float-right">N/A</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Earnings</b> <a class="float-right">Rs. 543000/-</a>
+                    <b>Earnings</b> <a class="float-right">N/A</a>
                   </li>
                   {{-- <li class="list-group-item">
                     <b>Friends</b> <a class="float-right">13,287</a>

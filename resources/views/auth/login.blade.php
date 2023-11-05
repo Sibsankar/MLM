@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
+                <img class="" src="{{ url('/')}}/images/applogo.png" alt="logo" height="100" width="100" style="margin-left: 440px; margin-top:20px;">
                 <div class="card-body">
                     @if(session('successmessage'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">

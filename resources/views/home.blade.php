@@ -6,7 +6,10 @@
         <div class="col-md-12" style="padding-left: 200px">
             <div class="card">
                 <div class="card-header">{{ __('Edit Profile') }}</div>
-                <a href="{{ route('generate-pdf') }}">Generate Pdf</a>
+                <div col-md-3><a class="btn btn-xs btn-success mt-4" href="{{ route('generate-pdf') }}" target="_blank">Generate Pdf</a>
+                <p style="color: red;">Please remember. Click generate PDF if you enter all the data correctly. Once you generate PDf then you will not be able to update your profile</p>
+                </div>
+                
 
                 <div class="card-body" style="max-height:75vh; overflow-y:scroll;">
                     @if (session('status'))
