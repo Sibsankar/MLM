@@ -172,11 +172,11 @@
                   <div class="post">
                       <div class="user-block row">
                         <label class="col-2">Sponsor Code</label>
-                        <div class="col-10">{{ isset($sponsorDetails[0]->sponsor_code) ? $sponsorDetails[0]->sponsor_code : '' }}</div>
+                        <div class="col-10">{{ isset($sponsor->sponsor_code) ? $sponsor->sponsor_code : '' }}</div>
                         <label class="col-2">Sponsor Name</label>
-                        <div class="col-10">{{ isset($sponsorDetails[0]->associate_name) ? $sponsorDetails[0]->associate_name : '' }}</div> 
+                        <div class="col-10">{{ isset($sponsor->associate_name) ? $sponsor->associate_name : '' }}</div> 
                         <label class="col-2">Sponsor Rank</label>
-                        <div class="col-10">{{ isset($sponsorDetails[0]->rank_name) ? $sponsorDetails[0]->rank_name : '' }}</div> 
+                        <div class="col-10">{{ isset($sponsor->rankdetails) ? $sponsor->rankdetails->rank_name : '' }}</div> 
                       </div>
                       <!-- /.user-block -->
                       

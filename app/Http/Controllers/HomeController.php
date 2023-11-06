@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use App\Models\User_detail; 
 use Illuminate\Support\Facades\DB;
-use PDF;
+//use PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class HomeController extends Controller
 {
@@ -112,12 +113,18 @@ class HomeController extends Controller
     }
 
 public function viewProfile($id){
-    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name',)
+    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name')
     ->leftJoin('ranks as ranks', 'ud1.rank', '=', 'ranks.id') 
     ->where('ud1.user_id', $id)
     ->first();
-    //dd($getAssociatesDetails);
-    return view('view_profile')->with(['user' => \Auth::user(),'associate' =>$getAssociatesDetails ]);
+
+    $sponsor = '';
+    if (!empty($getAssociatesDetails)) {
+        $sponsor = User_detail::with('rankdetails')->where('sponsor_code', $getAssociatesDetails->referred_by)->first();
+    }
+    
+    // dd($sponsor);
+    return view('view_profile')->with(['user' => \Auth::user(),'associate' =>$getAssociatesDetails, 'sponsor' => $sponsor ]);
 
 }
 
