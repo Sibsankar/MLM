@@ -59,6 +59,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
     
 });
 
+Route::get('/collection/list', [App\Http\Controllers\Admin\CollectionController::class, 'list'])->name('collection_list');
+Route::get('/collection/create', [App\Http\Controllers\Admin\CollectionController::class, 'create'])->name('collection_create');
+Route::post('/collection/add', [App\Http\Controllers\Admin\CollectionController::class, 'add'])->name('collection_add');
+Route::get('/collection/edit', [App\Http\Controllers\Admin\CollectionController::class, 'edit'])->name('collection_edit');
+Route::post('/collection/update/{id}', [App\Http\Controllers\Admin\CollectionController::class, 'update'])->name('collection_update');
+Route::get('/collection/delete/{id}', [App\Http\Controllers\Admin\CollectionController::class, 'delete'])->name('collection_delete');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user-registration', [App\Http\Controllers\UserRegistrationController::class, 'registration'])->name('registration');
 Route::post('/get-sponser-details', [App\Http\Controllers\UserRegistrationController::class, 'getSponser'])->name('getSponser');
