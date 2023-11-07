@@ -22,4 +22,15 @@ class Collection extends Model
         'is_approved',
         'user_id'
     ];
+
+    protected $appends = ['image_path'];
+
+    public function getImagePathAttribute()
+    {
+        if ($this->payment_image) {
+            return asset('images/' . $this->payment_image);
+        } else {
+            return asset('images/no-image.png');
+        }
+    }
 }
