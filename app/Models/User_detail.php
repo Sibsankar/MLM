@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Rank;
 
 class User_detail extends Model
 {
@@ -59,5 +60,9 @@ class User_detail extends Model
         } else {
             return asset('images/no-image.png');
         }
+    }
+
+    public function rankdetails() {
+        return $this->belongsTo(Rank::class, 'rank');
     }
 }

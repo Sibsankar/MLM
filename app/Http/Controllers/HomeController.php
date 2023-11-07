@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 //use PDF;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
-
 class HomeController extends Controller
 {
     /**
@@ -40,7 +39,7 @@ class HomeController extends Controller
         $userData = \Auth::user();
         $getSponsorDetails = DB::table('user_details')->select('user_details.associate_name','user_details.sponsor_code','user_details.rank','ranks.rank_name','ranks.rank_seq')
         ->leftJoin('ranks as ranks', 'user_details.rank', '=', 'ranks.id')
-                        ->where('user_details.user_id', '=', $userData->details[0]->referred_by)
+                        ->where('user_details.sponsor_code', '=', $userData->details[0]->referred_by)
                         ->get();
     
         $getRanks = DB::table('ranks')
@@ -114,12 +113,18 @@ class HomeController extends Controller
     }
 
 public function viewProfile($id){
-    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name',)
+    $getAssociatesDetails = DB::table('user_details as ud1')->select('ud1.*','ud1.rank','ranks.rank_seq','ranks.rank_name')
     ->leftJoin('ranks as ranks', 'ud1.rank', '=', 'ranks.id') 
     ->where('ud1.user_id', $id)
     ->first();
-    //dd($getAssociatesDetails);
-    return view('view_profile')->with(['user' => \Auth::user(),'associate' =>$getAssociatesDetails ]);
+
+    $sponsor = '';
+    if (!empty($getAssociatesDetails)) {
+        $sponsor = User_detail::with('rankdetails')->where('sponsor_code', $getAssociatesDetails->referred_by)->first();
+    }
+    
+    // dd($sponsor);
+    return view('view_profile')->with(['user' => \Auth::user(),'associate' =>$getAssociatesDetails, 'sponsor' => $sponsor ]);
 
 }
 
@@ -150,6 +155,8 @@ public function viewProfile($id){
         $pdf->setOptions(['isPhpEnabled', true]);
         $pdf->setPaper('L', 'landscape');
         
+        $userData->update(['is_edit' => '1']);
+        //dd($userData);
         return $pdf->stream('test_pdf.pdf'); 
          
        

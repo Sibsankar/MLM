@@ -23,6 +23,6 @@
         
       </ul>
     </div>
-    <strong>Copyright &copy; 2023 <a href="">MLM</a>.</strong>
+    <strong>Copyright &copy; 2023 <a href="">DMPL</a>.</strong>
     All rights reserved.
 </footer>

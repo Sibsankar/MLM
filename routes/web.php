@@ -24,7 +24,8 @@ Route::get('/sendsms', [App\Http\Controllers\UserRegistrationController::class, 
 //Forgot password
 Route::get('/forgot-password', [App\Http\Controllers\UserRegistrationController::class, 'forgot_password'])->name('forgot_password');
 Route::post('/forgot-password/send-otp', [App\Http\Controllers\UserRegistrationController::class, 'send_otp'])->name('send_otp');
-Route::any('/forgot-password/verify-otp/{token?}', [App\Http\Controllers\UserRegistrationController::class, 'verify_otp'])->name('verify_otp');
+Route::post('/forgot-password/resend-otp', [App\Http\Controllers\UserRegistrationController::class, 'resend_otp'])->name('resend_otp');
+Route::any('/forgot-password/verify-otp', [App\Http\Controllers\UserRegistrationController::class, 'verify_otp'])->name('verify_otp');
 Route::get('/reset-password/{token}', [App\Http\Controllers\UserRegistrationController::class, 'reset_pwd'])->name('reset_pwd');
 Route::post('/update-password', [App\Http\Controllers\UserRegistrationController::class, 'update_pwd'])->name('update_pwd');
 
@@ -58,12 +59,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function() {
     
 });
 
+Route::get('/collection/list', [App\Http\Controllers\Admin\CollectionController::class, 'list'])->name('collection_list');
+Route::get('/collection/create', [App\Http\Controllers\Admin\CollectionController::class, 'create'])->name('collection_create');
+Route::post('/collection/add', [App\Http\Controllers\Admin\CollectionController::class, 'add'])->name('collection_add');
+Route::get('/collection/edit', [App\Http\Controllers\Admin\CollectionController::class, 'edit'])->name('collection_edit');
+Route::post('/collection/update/{id}', [App\Http\Controllers\Admin\CollectionController::class, 'update'])->name('collection_update');
+Route::get('/collection/delete/{id}', [App\Http\Controllers\Admin\CollectionController::class, 'delete'])->name('collection_delete');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user-registration', [App\Http\Controllers\UserRegistrationController::class, 'registration'])->name('registration');
 Route::post('/get-sponser-details', [App\Http\Controllers\UserRegistrationController::class, 'getSponser'])->name('getSponser');
 Route::post('/get-rank-details', [App\Http\Controllers\UserRegistrationController::class, 'getRankbySp'])->name('getRankbySp');
 
 Route::post('/add-user', [App\Http\Controllers\UserRegistrationController::class, 'addUser'])->name('addUser');
+Route::post('/resend-reg-otp', [App\Http\Controllers\UserRegistrationController::class, 'resend_reg_otp'])->name('resend_reg_otp');
 Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
 Route::post('/change-pwd', [App\Http\Controllers\HomeController::class, 'changePwd'])->name('updatePwd');
 Route::get('/my-associate', [App\Http\Controllers\HomeController::class, 'myassociate'])->name('my-associate');

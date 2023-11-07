@@ -25,6 +25,8 @@ class User extends Authenticatable
         'type',
         'password',
         'pwd_status',
+        'is_edit',
+        'admin_perm',
         'remember_token'
     ];
 

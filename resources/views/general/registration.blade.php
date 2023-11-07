@@ -1,6 +1,3 @@
-
-
-
 @extends('general.layouts.app_general')
 
 @section('content') 
@@ -50,23 +47,27 @@
               </div>
               
               @if(session('successmessage'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success alert-dismissible fade show" role="alert" id="success_msgo">
                     {{session('successmessage')}}
                 </div>
-                @endif
-                @if(session('temppassword'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{session('temppassword')}}
-                </div>
-                @endif
-                @if(count($errors))
-                    @foreach($errors->all() as $error)
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{$error}}
-                    </div>
-                    @endforeach
-                @endif
+              @endif
+              @if(count($errors))
+                  @foreach($errors->all() as $error)
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert" id="error_msgo">
+                      {{$error}}
+                  </div>
+                  @endforeach
+              @endif
+              <div class="" id="success_msg"></div>
+              <div class="" id="error_msg"></div> 
               <!-- /.card-header -->
+              @if(session('temppassword'))
+                <input type="hidden" id="phone_no" value="{{session('temppassword')}}"/>
+                <div class="mt-2 pl-3 text-left" id="resend_sec">
+                  <p id="reset_timer">Resend Password in - <span id="timer"></span></p>
+                  <button type="button" id="resend_otp" class="btn btn-info" onclick="resend()">Resend Password Now</button>
+                </div>
+              @endif
               <!-- form start -->
               <form method="POST" action="{{ route('addUser') }}" enctype='multipart/form-data'>
                 @csrf
@@ -181,8 +182,74 @@
 <!-- ./wrapper -->
 
 <script type="text/javascript">
+  // -----------------timer ------------------------------- 
+  setTimeout(function() {
+    $('#success_msgo').hide();
+    $('#error_msgo').hide();
+    // $('#success_msg').hide();
+    // $('#error_msg').hide();
+  }, 30000);
+  let timerOn = true;
 
-function phoneMask(e){
+  function timer(remaining) {
+      var m = Math.floor(remaining / 60);
+      var s = remaining % 60;
+      
+      m = m < 10 ? '0' + m : m;
+      s = s < 10 ? '0' + s : s;
+      document.getElementById('timer').innerHTML = m + ':' + s;
+      remaining -= 1;
+      
+      if(remaining >= 0 && timerOn) {
+          $("#resend_otp").hide();
+          setTimeout(function() {
+              timer(remaining);
+          }, 1000);
+          return;
+      }
+
+      if(!timerOn) {
+          // Do validate stuff here
+          console.log('hhfhfhf');
+          return;
+      }
+      
+      // Do timeout stuff here
+      // alert('Timeout for otp');
+      $("#reset_timer").hide();
+      $("#resend_otp").show();
+  }
+
+  timer(30);
+
+  function resend() {
+      $('#success_msgo').hide();
+      $('#error_msgo').hide();
+      // alert('resend otp');
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      $.ajax({
+          /* the route pointing to the post function */
+          url: "{{ route('resend_reg_otp') }}",
+          type: 'POST',
+          data: {_token: CSRF_TOKEN, phone_no:$("#phone_no").val()},
+          dataType: 'JSON',
+          success: function (data) { 
+              if (data.status == 'success') {
+                  $('#success_msg').addClass('alert alert-success');
+                  $('#success_msg').html(data.msg);
+              } else {
+                  $('#error_msg').addClass('alert alert-danger');
+                  $('#error_msg').html(data.msg);
+              }
+          }
+      }); 
+
+      $("#reset_timer").show();
+      $("#resend_otp").hide();
+      timer(30);
+  }
+  // timer end --------------------
+  function phoneMask(e){
 	var s=e.val();
 	var s=s.replace(/[_\W]+/g,'');
 	var n=s.length;
@@ -215,12 +282,12 @@ $('.phone').keyup();
         };
       var url="{{ URL::to('') }}"+"/get-sponser-details";
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-    $.ajax({
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+        $.ajax({
                 type:'POST',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 url: url ,                
@@ -271,7 +338,6 @@ $.ajaxSetup({
            });
     
   }
-  
 </script>
 @endsection
 

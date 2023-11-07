@@ -247,7 +247,7 @@
                         <!-- /.card-body -->
 
                         <div class="card-footer mt-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        @if($user->is_edit == 0)<button type="submit" class="btn btn-primary">Submit</button>@endif
                         </div>
                         </form>
                         <br><br><br>
