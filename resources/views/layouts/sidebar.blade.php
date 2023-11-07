@@ -13,9 +13,13 @@
       <div class="image">
         <?php 
         $userDetails = DB::table('user_details')->where('user_id', Auth::user()->id)->first();
-       
+       if(!empty($userDetails->image)){
+        $image = $userDetails->image;
+       }else{
+        $image = 'no-image.png';
+       }
         ?>
-        <img src="{{ url('/')}}/images/{{ $userDetails->image }}" class="img-circle elevation-2" alt="User Image">
+        <img src="{{ url('/')}}/images/{{ $image }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
         <a href="#" class="d-block">{{ Auth::user()->name }}</a>

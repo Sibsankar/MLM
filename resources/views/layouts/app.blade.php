@@ -95,6 +95,25 @@
                                     <a class="dropdown-item border-top" href="{{ route('home') }}">Edit Profile</a>
                                     <a class="dropdown-item border-top" href="{{ route('viewProfile',['id'=>Auth::user()->id]) }}">View Profile</a>
                                     <a class="dropdown-item border-top" href="{{ route('my-associate') }}">My Associates</a>
+                                    @if(\Auth::user()->type == 'admin')
+                                   
+                                      <a href="{{ route('addCommissionCategory') }}" class="dropdown-item border-top">
+                                        <p>Commission Category</p>
+                                      </a>
+                                    
+                            
+                                
+                                      <a href="{{ route('addCommissionType') }}" class="dropdown-item border-top">
+                                        <p>Commission Type</p>
+                                      </a>
+                                 
+                                    
+                               
+                                      <a href="{{ route('rank_list') }}" class="dropdown-item border-top">
+                                        <p>Rank Config List</p>
+                                      </a>
+                                 
+                                    @endif
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
