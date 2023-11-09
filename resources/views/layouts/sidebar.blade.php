@@ -46,6 +46,11 @@
             <p>My Associates</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ route('collection_list') }}" class="nav-link">
+            <p>My Collections</p>
+          </a>
+        </li>
         @if(\Auth::user()->type == 'admin')
         <li class="nav-item">
           <a href="{{ route('addCommissionCategory') }}" class="nav-link">
